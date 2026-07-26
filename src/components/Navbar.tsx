@@ -19,10 +19,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
 
   const navLinks = [
     { name: 'Início', href: '#inicio' },
+    { name: 'Monte Seu Kit Fotus', href: '#monte-seu-kit' },
     { name: 'Calculadora', href: '#calculadora' },
     { name: 'Serviços', href: '#servicos' },
     { name: 'Bombeamento Solar', href: '#bombeamento' },
-    { name: 'Engenharia & Subestações', href: '#subestacoes' },
     { name: 'Projetos', href: '#portfolio' },
     { name: 'Engenheiro IA', href: '#consultor-ia' },
     { name: 'Dúvidas', href: '#faq' },

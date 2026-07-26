@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { FotusKitBuilder } from './components/FotusKitBuilder';
 import { SolarCalculator } from './components/SolarCalculator';
 import { PumpingSimulator } from './components/PumpingSimulator';
 import { ServicesSection } from './components/ServicesSection';
@@ -42,6 +43,13 @@ export default function App() {
 
       {/* Hero Banner Section */}
       <Hero onOpenQuoteModal={() => handleOpenQuoteModal()} />
+
+      {/* Interactive Monte Seu Kit Fotus Builder */}
+      <FotusKitBuilder
+        onOpenQuoteModalWithKit={(serviceName, notes) =>
+          handleOpenQuoteModal(serviceName, undefined, notes)
+        }
+      />
 
       {/* Solar Savings Calculator */}
       <SolarCalculator
