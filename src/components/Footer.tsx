@@ -16,14 +16,14 @@ export const Footer: React.FC = () => {
           {/* Brand Info (4 cols) */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-3.5">
-              <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-slate-900 border border-amber-500/30 p-1 shadow-lg shadow-amber-500/20 overflow-hidden">
+              <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-slate-900 border border-blue-500/40 p-1 shadow-lg shadow-blue-500/20 overflow-hidden flex-shrink-0">
                 <img src="/solar-radiante-logo.svg" alt="Solar Radiante Logo" className="w-full h-full object-contain" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-black tracking-tight text-white leading-none">
-                  SOLAR <span className="text-amber-400">RADIANTE</span>
+                <span className="text-2xl sm:text-3xl font-black tracking-tight text-blue-400 drop-shadow-md leading-none">
+                  SOLAR RADIANTE
                 </span>
-                <span className="text-[11px] uppercase font-bold text-amber-300/90 tracking-widest mt-1">
+                <span className="text-xs uppercase font-bold text-blue-300/90 tracking-widest mt-1">
                   Santarém &amp; Engenharia Solar
                 </span>
               </div>

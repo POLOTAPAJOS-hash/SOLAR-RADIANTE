@@ -58,7 +58,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
             onClick={(e) => handleLinkClick(e, '#inicio')}
             className="flex items-center gap-3.5 group"
           >
-            <div className="relative flex items-center justify-center w-12 h-12 rounded-2xl bg-slate-900 border border-amber-500/30 shadow-lg shadow-amber-500/20 group-hover:scale-105 group-hover:border-amber-400 transition-all duration-300 overflow-hidden p-1">
+            <div className="relative flex items-center justify-center w-14 h-14 rounded-2xl bg-slate-900 border border-blue-500/40 shadow-xl shadow-blue-500/20 group-hover:scale-105 group-hover:border-blue-400 transition-all duration-300 overflow-hidden p-1 flex-shrink-0">
               <img 
                 src="/solar-radiante-logo.svg" 
                 alt="Solar Radiante Logo" 
@@ -66,10 +66,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-2xl font-black tracking-tight text-[#133ad6] flex items-center gap-1.5 leading-none">
-                SOLAR <span className="bg-gradient-to-r from-amber-300 to-amber-500 bg-clip-text text-transparent">RADIANTE</span>
+              <span className="text-3xl sm:text-4xl font-black tracking-tight text-blue-400 drop-shadow-[0_2px_8px_rgba(59,130,246,0.4)] flex items-center gap-2 leading-none">
+                SOLAR RADIANTE
               </span>
-              <span className="text-[11px] uppercase font-bold text-amber-300/90 tracking-widest mt-1">
+              <span className="text-xs uppercase font-bold text-blue-300/90 tracking-widest mt-1">
                 Santarém &amp; Engenharia Solar
               </span>
             </div>
