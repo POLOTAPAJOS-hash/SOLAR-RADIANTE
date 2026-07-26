@@ -116,7 +116,7 @@ export const FaqSection: React.FC = () => {
           <h4 className="text-sm font-bold text-white">Ficou com alguma dúvida específica?</h4>
           <p className="text-xs text-slate-400">Nossa equipe de engenheiros está disponível para atendimento direto via WhatsApp.</p>
           <a
-            href="https://wa.me/5519999998888?text=Olá!%20Tenho%20uma%20dúvida%20sobre%20energia%20solar."
+            href="https://wa.me/5593991211156?text=Olá!%20Tenho%20uma%20dúvida%20sobre%20energia%20solar."
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 rounded-xl hover:bg-emerald-900/60 transition-all"

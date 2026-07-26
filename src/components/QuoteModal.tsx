@@ -72,7 +72,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
       (formData.notes ? `*Observações:* ${formData.notes}` : '');
 
     const encoded = encodeURIComponent(text);
-    window.open(`https://wa.me/5519999998888?text=${encoded}`, '_blank');
+    window.open(`https://wa.me/5593991211156?text=${encoded}`, '_blank');
   };
 
   return (
@@ -122,7 +122,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                 <input
                   type="tel"
                   required
-                  placeholder="(19) 99999-8888"
+                  placeholder="(93) 99121-1156"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500"

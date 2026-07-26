@@ -57,7 +57,7 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5">
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                <span className="text-slate-300">(19) 3888-9000 / (19) 99999-8888</span>
+                <span className="text-slate-300">(93) 99121-1156</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-amber-400 flex-shrink-0" />
@@ -78,7 +78,7 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-2 space-y-3">
             <h4 className="text-sm font-bold text-white uppercase tracking-wider">Atendimento Direto</h4>
             <a
-              href="https://wa.me/5519999998888?text=Olá!%20Gostaria%20de%20falar%20com%20um%20especialista."
+              href="https://wa.me/5593991211156?text=Olá!%20Gostaria%20de%20falar%20com%20um%20especialista."
               target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 py-2.5 px-3 text-xs font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all"

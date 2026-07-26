@@ -85,7 +85,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
           {/* Action Buttons */}
           <div className="hidden md:flex items-center gap-3">
             <a
-              href="https://wa.me/5519999998888?text=Olá!%20Gostaria%20de%20solicitar%20um%20orçamento%20de%20energia%20solar."
+              href="https://wa.me/5593991211156?text=Olá!%20Gostaria%20de%20solicitar%20um%20orçamento%20de%20energia%20solar."
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 hover:bg-emerald-900/60 rounded-lg transition-all"
@@ -143,7 +143,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
             </button>
 
             <a
-              href="https://wa.me/5519999998888?text=Olá!%20Gostaria%20de%20falar%20com%20um%20especialista%20da%20Solar%20Radiante."
+              href="https://wa.me/5593991211156?text=Olá!%20Gostaria%20de%20falar%20com%20um%20especialista%20da%20Solar%20Radiante."
               target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 rounded-xl"
