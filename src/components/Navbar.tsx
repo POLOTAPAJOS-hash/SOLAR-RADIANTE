@@ -19,6 +19,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
 
   const navLinks = [
     { name: 'Início', href: '#inicio' },
+    { name: 'Tabela & Admin Kits', href: '#tabela-kits-solares' },
     { name: 'Monte Seu Kit Fotus', href: '#monte-seu-kit' },
     { name: 'Calculadora', href: '#calculadora' },
     { name: 'Serviços', href: '#servicos' },

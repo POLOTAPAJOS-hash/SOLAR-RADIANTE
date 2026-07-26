@@ -314,6 +314,29 @@ export const FOTUS_PROTECTIONS: FotusProtection[] = [
 ];
 
 // PRESET KITS ORGANIZED EXPLICITLY BY kWp SCALE
+
+/**
+ * Converte a Potência Pico do Gerador CC (kWp) para a Potência Ativa Nominal CA do Inversor (kW)
+ * @param kwp Potência instalada em kWp (CC)
+ * @param oversizingRatio Fator de sobredimensionamento CC/CA (Padrão 1.20x ou Performance Ratio ~83%)
+ * @returns Potência estimada em kW (CA)
+ */
+export const transformKwpToKw = (kwp: number, oversizingRatio: number = 1.20): number => {
+  if (!kwp || kwp <= 0) return 0;
+  return Number((kwp / oversizingRatio).toFixed(2));
+};
+
+/**
+ * Converte a Potência Ativa do Inversor CA (kW) para a Potência em Módulos CC Necessária (kWp)
+ * @param kw Potência nominal em kW (CA)
+ * @param oversizingRatio Fator de sobredimensionamento CC/CA (Padrão 1.20x)
+ * @returns Potência instalada necessária em kWp (CC)
+ */
+export const transformKwToKwp = (kw: number, oversizingRatio: number = 1.20): number => {
+  if (!kw || kw <= 0) return 0;
+  return Number((kw * oversizingRatio).toFixed(2));
+};
+
 export const PRESET_FOTUS_KITS: PresetKit[] = [
   {
     id: 'kit-2-32-kwp',
@@ -469,3 +492,72 @@ export const PRESET_FOTUS_KITS: PresetKit[] = [
     description: 'Acionamento direto de bombas de poço artesiano até 120m sem uso de baterias.'
   }
 ];
+
+export interface SolarRadianteKit {
+  id: string;
+  kwhMes: number;
+  geracaoEstimada: number;
+  kwp: number;
+  qtdModulos: number;
+  potenciaModuloWatts: number;
+  inversor: string;
+  valorAVista: number;
+  valorFinanciado: number;
+  valorCartao: number;
+  badge?: string;
+}
+
+export const DEFAULT_SOLAR_RADIANTE_KITS: SolarRadianteKit[] = [
+  { id: 'sr-1', kwhMes: 300, geracaoEstimada: 357, kwp: 2.80, qtdModulos: 4, potenciaModuloWatts: 700, inversor: '3 KW', valorAVista: 8900.00, valorFinanciado: 338.64, valorCartao: 846.65, badge: 'Kit Inicial' },
+  { id: 'sr-2', kwhMes: 400, geracaoEstimada: 447, kwp: 3.50, qtdModulos: 5, potenciaModuloWatts: 700, inversor: '3 KW', valorAVista: 10800.00, valorFinanciado: 403.64, valorCartao: 1027.39 },
+  { id: 'sr-3', kwhMes: 500, geracaoEstimada: 536, kwp: 4.20, qtdModulos: 6, potenciaModuloWatts: 700, inversor: '3 KW', valorAVista: 11500.00, valorFinanciado: 427.59, valorCartao: 1093.98, badge: 'Popular Residencial' },
+  { id: 'sr-4', kwhMes: 700, geracaoEstimada: 715, kwp: 5.60, qtdModulos: 8, potenciaModuloWatts: 700, inversor: '5 KW', valorAVista: 12000.00, valorFinanciado: 444.70, valorCartao: 1141.55 },
+  { id: 'sr-5', kwhMes: 800, geracaoEstimada: 893, kwp: 7.00, qtdModulos: 10, potenciaModuloWatts: 700, inversor: '5 KW', valorAVista: 13200.00, valorFinanciado: 485.75, valorCartao: 1255.70, badge: 'Mais Vendido' },
+  { id: 'sr-6', kwhMes: 900, geracaoEstimada: 982, kwp: 7.70, qtdModulos: 11, potenciaModuloWatts: 700, inversor: '6 KW', valorAVista: 15400.00, valorFinanciado: 561.01, valorCartao: 1464.99 },
+  { id: 'sr-7', kwhMes: 1000, geracaoEstimada: 1072, kwp: 8.40, qtdModulos: 12, potenciaModuloWatts: 700, inversor: '6 KW', valorAVista: 16300.00, valorFinanciado: 591.80, valorCartao: 1550.60, badge: 'Residencial Grande' },
+  { id: 'sr-8', kwhMes: 1100, geracaoEstimada: 1161, kwp: 9.10, qtdModulos: 13, potenciaModuloWatts: 700, inversor: '7.5 KW', valorAVista: 17900.00, valorFinanciado: 646.53, valorCartao: 1702.81 },
+  { id: 'sr-9', kwhMes: 1200, geracaoEstimada: 1250, kwp: 9.80, qtdModulos: 14, potenciaModuloWatts: 700, inversor: '7.5 KW', valorAVista: 18700.00, valorFinanciado: 673.90, valorCartao: 1778.92 },
+  { id: 'sr-10', kwhMes: 1300, geracaoEstimada: 1340, kwp: 10.50, qtdModulos: 15, potenciaModuloWatts: 700, inversor: '10 KW', valorAVista: 21900.00, valorFinanciado: 783.37, valorCartao: 2083.33 },
+  { id: 'sr-11', kwhMes: 1500, geracaoEstimada: 1608, kwp: 12.60, qtdModulos: 18, potenciaModuloWatts: 700, inversor: '10 KW', valorAVista: 24800.00, valorFinanciado: 882.58, valorCartao: 2359.20, badge: 'Comercial Leve' },
+  { id: 'sr-12', kwhMes: 1700, geracaoEstimada: 1786, kwp: 14.00, qtdModulos: 20, potenciaModuloWatts: 700, inversor: '10 KW', valorAVista: 27800.00, valorFinanciado: 985.21, valorCartao: 2644.59 },
+  { id: 'sr-13', kwhMes: 1900, geracaoEstimada: 1965, kwp: 15.40, qtdModulos: 22, potenciaModuloWatts: 700, inversor: '2X7.5 KW', valorAVista: 30600.00, valorFinanciado: 1081.00, valorCartao: 2910.95 },
+  { id: 'sr-14', kwhMes: 2000, geracaoEstimada: 2143, kwp: 16.80, qtdModulos: 24, potenciaModuloWatts: 700, inversor: '2X7.5 KW', valorAVista: 32300.00, valorFinanciado: 1139.16, valorCartao: 3072.67 },
+  { id: 'sr-15', kwhMes: 2300, geracaoEstimada: 2322, kwp: 18.20, qtdModulos: 26, potenciaModuloWatts: 700, inversor: '2X7.5 KW', valorAVista: 34600.00, valorFinanciado: 1217.84, valorCartao: 3291.47 },
+  { id: 'sr-16', kwhMes: 2500, geracaoEstimada: 2550, kwp: 19.60, qtdModulos: 28, potenciaModuloWatts: 700, inversor: '2X7.5 KW', valorAVista: 36400.00, valorFinanciado: 1279.42, valorCartao: 3462.71 },
+  { id: 'sr-17', kwhMes: 2600, geracaoEstimada: 2679, kwp: 21.00, qtdModulos: 30, potenciaModuloWatts: 700, inversor: '2X7.5 KW', valorAVista: 38500.00, valorFinanciado: 1351.26, valorCartao: 3662.48 },
+  { id: 'sr-18', kwhMes: 2800, geracaoEstimada: 2858, kwp: 22.40, qtdModulos: 32, potenciaModuloWatts: 700, inversor: '2X10 KW', valorAVista: 40000.00, valorFinanciado: 1402.58, valorCartao: 3805.17 },
+  { id: 'sr-19', kwhMes: 3000, geracaoEstimada: 3036, kwp: 23.80, qtdModulos: 34, potenciaModuloWatts: 700, inversor: '2X10 KW', valorAVista: 41500.00, valorFinanciado: 1453.89, valorCartao: 3947.86, badge: 'Comercial Médio' },
+  { id: 'sr-20', kwhMes: 3500, geracaoEstimada: 3572, kwp: 28.00, qtdModulos: 40, potenciaModuloWatts: 700, inversor: '2X10 KW', valorAVista: 47500.00, valorFinanciado: 1659.15, valorCartao: 4518.64 },
+  { id: 'sr-21', kwhMes: 4000, geracaoEstimada: 4019, kwp: 31.50, qtdModulos: 45, potenciaModuloWatts: 700, inversor: '3X10 KW', valorAVista: 55300.00, valorFinanciado: 1925.99, valorCartao: 5260.65 },
+  { id: 'sr-22', kwhMes: 4500, geracaoEstimada: 4554, kwp: 35.70, qtdModulos: 51, potenciaModuloWatts: 700, inversor: '3X10 KW', valorAVista: 59200.00, valorFinanciado: 2059.41, valorCartao: 5631.65 },
+  { id: 'sr-23', kwhMes: 5000, geracaoEstimada: 5090, kwp: 39.90, qtdModulos: 57, potenciaModuloWatts: 700, inversor: '3X10 KW', valorAVista: 64500.00, valorFinanciado: 2240.72, valorCartao: 6135.84 },
+  { id: 'sr-24', kwhMes: 5500, geracaoEstimada: 5537, kwp: 43.40, qtdModulos: 62, potenciaModuloWatts: 700, inversor: '3X10 KW', valorAVista: 78600.00, valorFinanciado: 2723.08, valorCartao: 7477.16 },
+  { id: 'sr-25', kwhMes: 6000, geracaoEstimada: 6072, kwp: 47.60, qtdModulos: 68, potenciaModuloWatts: 700, inversor: '37.5KW TRI', valorAVista: 87400.00, valorFinanciado: 3024.13, valorCartao: 8314.30, badge: 'Trifásico Industrial' },
+  { id: 'sr-26', kwhMes: 6500, geracaoEstimada: 6608, kwp: 51.80, qtdModulos: 74, potenciaModuloWatts: 700, inversor: '37.5KW TRI', valorAVista: 99700.00, valorFinanciado: 3444.91, valorCartao: 9484.39 },
+  { id: 'sr-27', kwhMes: 7000, geracaoEstimada: 7055, kwp: 55.30, qtdModulos: 79, potenciaModuloWatts: 700, inversor: '37.5KW TRI', valorAVista: 105500.00, valorFinanciado: 3643.33, valorCartao: 10036.14 },
+  { id: 'sr-28', kwhMes: 8000, geracaoEstimada: 8037, kwp: 63.00, qtdModulos: 90, potenciaModuloWatts: 700, inversor: '2X25KW TRI', valorAVista: 114800.00, valorFinanciado: 3961.48, valorCartao: 10920.85 },
+  { id: 'sr-29', kwhMes: 8500, geracaoEstimada: 8573, kwp: 67.20, qtdModulos: 96, potenciaModuloWatts: 700, inversor: '3X20KW TRI', valorAVista: 123600.00, valorFinanciado: 4262.53, valorCartao: 11757.99 },
+  { id: 'sr-30', kwhMes: 9000, geracaoEstimada: 9109, kwp: 71.40, qtdModulos: 102, potenciaModuloWatts: 700, inversor: '75KW TRI', valorAVista: 128500.00, valorFinanciado: 4430.16, valorCartao: 12224.12 },
+  { id: 'sr-31', kwhMes: 9500, geracaoEstimada: 9555, kwp: 74.90, qtdModulos: 107, potenciaModuloWatts: 700, inversor: '75KW TRI', valorAVista: 134800.00, valorFinanciado: 4645.68, valorCartao: 12823.44, badge: 'Usina Minigeração' }
+];
+
+export const getStoredSolarRadianteKits = (): SolarRadianteKit[] => {
+  try {
+    const saved = localStorage.getItem('solar_radiante_kits');
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error('Error reading solar_radiante_kits from localStorage:', e);
+  }
+  return DEFAULT_SOLAR_RADIANTE_KITS;
+};
+
+export const saveSolarRadianteKits = (kits: SolarRadianteKit[]) => {
+  try {
+    localStorage.setItem('solar_radiante_kits', JSON.stringify(kits));
+  } catch (e) {
+    console.error('Error saving solar_radiante_kits to localStorage:', e);
+  }
+};
+

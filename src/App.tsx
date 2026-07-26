@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { SolarRadianteTable } from './components/SolarRadianteTable';
 import { FotusKitBuilder } from './components/FotusKitBuilder';
 import { SolarCalculator } from './components/SolarCalculator';
 import { PumpingSimulator } from './components/PumpingSimulator';
@@ -43,6 +44,13 @@ export default function App() {
 
       {/* Hero Banner Section */}
       <Hero onOpenQuoteModal={() => handleOpenQuoteModal()} />
+
+      {/* Tabela Oficial Solar Radiante + Aba do Administrador */}
+      <SolarRadianteTable
+        onOpenQuoteModalWithKit={(kitName, summary) =>
+          handleOpenQuoteModal(kitName, undefined, summary)
+        }
+      />
 
       {/* Interactive Monte Seu Kit Fotus Builder */}
       <FotusKitBuilder
