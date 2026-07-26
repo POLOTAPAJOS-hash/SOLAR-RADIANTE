@@ -57,20 +57,26 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
           <a
             href="#inicio"
             onClick={(e) => handleLinkClick(e, '#inicio')}
-            className="flex items-center gap-3.5 group"
+            className="flex items-center gap-3.5 group bg-white px-4 py-2.5 rounded-2xl shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300"
           >
-            <div className="relative flex items-center justify-center w-14 h-14 rounded-2xl bg-slate-900 border border-blue-500/40 shadow-xl shadow-blue-500/20 group-hover:scale-105 group-hover:border-blue-400 transition-all duration-300 overflow-hidden p-1 flex-shrink-0">
+            <div className="relative flex items-center justify-center w-12 h-12 rounded-xl bg-slate-50 border border-slate-200 shadow-sm group-hover:scale-105 transition-all duration-300 overflow-hidden p-1 flex-shrink-0">
               <img 
                 src="/solar-radiante-logo.svg" 
                 alt="Solar Radiante Logo" 
-                className="w-full h-full object-contain filter drop-shadow" 
+                className="w-full h-full object-contain" 
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-3xl sm:text-4xl font-black tracking-tight text-blue-400 drop-shadow-[0_2px_8px_rgba(59,130,246,0.4)] flex items-center gap-2 leading-none">
+              <span 
+                className="text-2xl sm:text-3xl font-black tracking-tight flex items-center gap-2 leading-none"
+                style={{ color: '#1b0b85' }}
+              >
                 SOLAR RADIANTE
               </span>
-              <span className="text-xs uppercase font-bold text-blue-300/90 tracking-widest mt-1">
+              <span 
+                className="text-[11px] uppercase font-extrabold tracking-widest mt-1"
+                style={{ color: '#1b0b85' }}
+              >
                 Santarém &amp; Engenharia Solar
               </span>
             </div>
