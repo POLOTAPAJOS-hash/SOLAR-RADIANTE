@@ -19,7 +19,14 @@ function getGeminiClient(): GoogleGenAI {
     if (!apiKey) {
       throw new Error('GEMINI_API_KEY is not defined in environment variables');
     }
-    aiClient = new GoogleGenAI({ apiKey });
+    aiClient = new GoogleGenAI({
+      apiKey,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        },
+      },
+    });
   }
   return aiClient;
 }
@@ -45,7 +52,7 @@ Sempre que pertinente:
 
     try {
       const ai = getGeminiClient();
-      const model = 'gemini-2.5-flash';
+      const model = 'gemini-3.6-flash';
 
       const contents = [
         { role: 'user', parts: [{ text: systemInstruction }] },
