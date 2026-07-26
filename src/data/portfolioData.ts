@@ -29,12 +29,12 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     id: 'proj-3',
     title: 'Bombeamento Solar de Alta Profundidade',
     category: 'Agronegócio',
-    location: 'Belterra / PA',
+    location: 'Santarém / PA',
     power: '12.5 kWp',
     savings: '100% Autonomia Elétrica',
     panelsCount: 22,
     image: 'https://images.unsplash.com/photo-1508873696983-2df515122519?auto=format&fit=crop&w=800&q=80',
-    description: 'Sistema de bombeamento solar direto para poço de 120m de profundidade na área rural de Belterra com vazão diária de 35.000 litros sem uso de baterias.',
+    description: 'Sistema de bombeamento solar direto para poço de 120m de profundidade na área rural de Santarém com vazão diária de 35.000 litros sem uso de baterias.',
     completionYear: '2024'
   },
   {

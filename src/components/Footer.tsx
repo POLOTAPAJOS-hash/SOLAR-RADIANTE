@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sun, Zap, Phone, Mail, MapPin, Clock, ShieldCheck, ArrowUp, MessageSquareText } from 'lucide-react';
+import { Sun, Zap, Phone, Mail, MapPin, Clock, ShieldCheck, ArrowUp, MessageSquareText, ExternalLink } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const scrollToTop = () => {
@@ -51,13 +51,16 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Contact Details (3 cols) */}
-          <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Atendimento & Matriz</h4>
+          {/* Contact Details & Map (5 cols) */}
+          <div className="lg:col-span-5 space-y-4">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-amber-400" />
+              <span>Atendimento &amp; Matriz em Santarém</span>
+            </h4>
             <ul className="space-y-2.5">
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                <span className="text-slate-300">(93) 99121-1156</span>
+                <span className="text-slate-300 font-medium">(93) 99121-1156</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-amber-400 flex-shrink-0" />
@@ -65,13 +68,35 @@ export const Footer: React.FC = () => {
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
-                <span className="text-slate-300">Av. Fernando Guilhon, 2500 - Santarém / PA (Oeste do Pará)</span>
+                <span className="text-slate-200 font-semibold">Alameda 22, Bairro Aeroporto Velho, Nº 70 — Santarém / PA</span>
               </li>
               <li className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                <span className="text-slate-300">Atendimento: Santarém, Belterra, Itaituba e Região</span>
+                <span className="text-slate-300">Atendimento: Segunda a Sexta das 08h às 18h | Sáb. até 12h</span>
               </li>
             </ul>
+
+            {/* Embedded Google Maps */}
+            <div className="mt-3 rounded-2xl overflow-hidden border border-slate-800 shadow-lg relative group">
+              <iframe
+                title="Localização Solar Radiante"
+                width="100%"
+                height="140"
+                style={{ border: 0, filter: 'grayscale(0.2) contrast(1.1) opacity(0.9)' }}
+                loading="lazy"
+                allowFullScreen
+                src="https://maps.google.com/maps?q=Alameda%2022%2C%2070%2C%20Aeroporto%20Velho%2C%20Santarem%20-%20PA&t=&z=16&ie=UTF8&iwloc=&output=embed"
+              ></iframe>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Alameda+22,+70,+Aeroporto+Velho,+Santarem+-+PA"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute bottom-2 right-2 bg-slate-950/90 hover:bg-amber-400 hover:text-slate-950 text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-lg border border-amber-500/30 transition-all flex items-center gap-1 shadow-md"
+              >
+                <span>Ver no Google Maps</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
           </div>
 
           {/* Quick Action (2 cols) */}

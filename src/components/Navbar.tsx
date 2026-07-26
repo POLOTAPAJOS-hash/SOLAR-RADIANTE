@@ -66,7 +66,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-2xl font-black tracking-tight text-white flex items-center gap-1.5 leading-none">
+              <span className="text-2xl font-black tracking-tight text-[#133ad6] flex items-center gap-1.5 leading-none">
                 SOLAR <span className="bg-gradient-to-r from-amber-300 to-amber-500 bg-clip-text text-transparent">RADIANTE</span>
               </span>
               <span className="text-[11px] uppercase font-bold text-amber-300/90 tracking-widest mt-1">

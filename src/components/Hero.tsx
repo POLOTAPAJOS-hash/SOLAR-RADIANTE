@@ -44,7 +44,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuoteModal }) => {
 
             {/* Description */}
             <p className="text-lg sm:text-xl text-slate-300 max-w-3xl leading-relaxed font-normal">
-              Projetos de engenharia solar e média/alta tensão sob medida para residências, comércio, indústrias e propriedades rurais em <strong className="text-amber-300">Santarém, Belterra e todo o Oeste do Pará</strong>. Reduza sua conta da Equatorial em até 95% com equipamentos Tier-1.
+              Projetos de engenharia solar e média/alta tensão sob medida para residências, comércio, indústrias e propriedades rurais em <strong className="text-amber-300">Santarém e todo o Oeste do Pará</strong>. Reduza sua conta da Equatorial em até 95% com equipamentos Tier-1.
             </p>
 
             {/* Feature Checkpoints */}

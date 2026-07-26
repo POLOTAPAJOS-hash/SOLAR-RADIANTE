@@ -31,7 +31,7 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenQuoteM
             Nossa Experiência em <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400 bg-clip-text text-transparent">Projetos Executados</span>
           </h2>
           <p className="text-slate-300 text-base sm:text-lg max-w-3xl mx-auto">
-            Conheça algumas das usinas solares, sistemas de bombeamento e subestações instaladas em Santarém, Belterra e Oeste do Pará com padrão de excelência Solar Radiante.
+            Conheça algumas das usinas solares, sistemas de bombeamento e subestações instaladas em Santarém e Oeste do Pará com padrão de excelência Solar Radiante.
           </p>
         </div>
 

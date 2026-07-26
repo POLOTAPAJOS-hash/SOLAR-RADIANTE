@@ -140,7 +140,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500"
                 />
                 <div className="flex flex-wrap gap-1.5 pt-1">
-                  {['Santarém', 'Belterra', 'Alter do Chão', 'Mojuí dos Campos', 'Itaituba', 'Oriximiná'].map((c) => (
+                  {['Santarém', 'Alter do Chão', 'Mojuí dos Campos', 'Itaituba', 'Oriximiná'].map((c) => (
                     <button
                       key={c}
                       type="button"
