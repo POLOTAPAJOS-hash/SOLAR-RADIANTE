@@ -39,43 +39,50 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 relative overflow-hidden ${
         isScrolled
-          ? 'bg-slate-900/95 backdrop-blur-md shadow-lg border-b border-amber-500/20 py-3'
-          : 'bg-slate-950/80 backdrop-blur-sm py-4 border-b border-white/10'
+          ? 'bg-slate-900/95 backdrop-blur-md shadow-2xl border-b border-amber-500/30 py-3.5'
+          : 'bg-slate-950/85 backdrop-blur-md py-5 border-b border-white/10'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
+      {/* Header Background Image & Glow Layer */}
+      <div className="absolute inset-0 pointer-events-none opacity-20 bg-[url('/solar-radiante-logo.svg')] bg-no-repeat bg-right-center bg-contain mix-blend-screen scale-125 translate-x-1/4 -translate-y-10" />
+      <div className="absolute top-0 left-1/3 w-96 h-24 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-transparent blur-2xl pointer-events-none" />
+
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+        <div className="flex items-center justify-between gap-4">
           
-          {/* Logo */}
+          {/* Logo with uploaded branding image */}
           <a
             href="#inicio"
             onClick={(e) => handleLinkClick(e, '#inicio')}
-            className="flex items-center gap-3 group"
+            className="flex items-center gap-3.5 group"
           >
-            <div className="relative flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 via-orange-500 to-amber-600 shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform duration-300">
-              <Sun className="w-6 h-6 text-slate-950 animate-spin-slow" />
-              <Zap className="w-3.5 h-3.5 text-slate-950 absolute -bottom-0.5 -right-0.5 bg-amber-300 rounded-full p-0.5 shadow-sm" />
+            <div className="relative flex items-center justify-center w-12 h-12 rounded-2xl bg-slate-900 border border-amber-500/30 shadow-lg shadow-amber-500/20 group-hover:scale-105 group-hover:border-amber-400 transition-all duration-300 overflow-hidden p-1">
+              <img 
+                src="/solar-radiante-logo.svg" 
+                alt="Solar Radiante Logo" 
+                className="w-full h-full object-contain filter drop-shadow" 
+              />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-extrabold tracking-tight text-white flex items-center gap-1">
-                SOLAR <span className="text-amber-400">RADIANTE</span>
+              <span className="text-2xl font-black tracking-tight text-white flex items-center gap-1.5 leading-none">
+                SOLAR <span className="bg-gradient-to-r from-amber-300 to-amber-500 bg-clip-text text-transparent">RADIANTE</span>
               </span>
-              <span className="text-[10px] uppercase font-semibold text-amber-200/80 tracking-widest -mt-1">
-                Energia & Engenharia
+              <span className="text-[11px] uppercase font-bold text-amber-300/90 tracking-widest mt-1">
+                Santarém &amp; Engenharia Solar
               </span>
             </div>
           </a>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden xl:flex items-center gap-1 bg-slate-800/40 p-1.5 rounded-full border border-slate-700/50">
+          <nav className="hidden xl:flex items-center gap-1.5 bg-slate-800/60 p-2 rounded-full border border-slate-700/60 backdrop-blur-md shadow-inner">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={(e) => handleLinkClick(e, link.href)}
-                className="px-3.5 py-1.5 text-xs font-medium text-slate-300 hover:text-amber-400 hover:bg-slate-700/50 rounded-full transition-all"
+                className="px-4 py-2 text-xs font-semibold text-slate-200 hover:text-amber-300 hover:bg-amber-500/10 rounded-full transition-all"
               >
                 {link.name}
               </a>
@@ -88,7 +95,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
               href="https://wa.me/5593991211156?text=Olá!%20Gostaria%20de%20solicitar%20um%20orçamento%20de%20energia%20solar."
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 hover:bg-emerald-900/60 rounded-lg transition-all"
+              className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-emerald-300 bg-emerald-950/60 border border-emerald-500/40 hover:bg-emerald-900/80 rounded-xl transition-all shadow-md shadow-emerald-950/50"
             >
               <MessageSquareText className="w-4 h-4 text-emerald-400" />
               <span>WhatsApp Direct</span>
@@ -96,7 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
 
             <button
               onClick={() => onOpenQuoteModal()}
-              className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 rounded-lg shadow-md shadow-amber-500/20 active:scale-95 transition-all"
+              className="flex items-center gap-2.5 px-5 py-2.5 text-xs font-extrabold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 hover:from-amber-300 hover:to-orange-400 rounded-xl shadow-lg shadow-amber-500/25 active:scale-95 transition-all"
             >
               <Calculator className="w-4 h-4" />
               <span>Solicitar Orçamento</span>

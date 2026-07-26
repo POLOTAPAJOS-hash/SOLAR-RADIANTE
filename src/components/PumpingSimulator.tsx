@@ -21,24 +21,24 @@ export const PumpingSimulator: React.FC<PumpingSimulatorProps> = ({ onOpenQuoteM
   };
 
   return (
-    <section id="bombeamento" className="py-20 bg-slate-950 relative overflow-hidden">
+    <section id="bombeamento" className="py-24 sm:py-32 bg-slate-950 relative overflow-hidden">
       {/* Glow background */}
-      <div className="absolute top-1/2 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold">
+        <div className="text-center max-w-4xl mx-auto mb-16 space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs sm:text-sm font-bold">
             <Droplets className="w-4 h-4 text-blue-400" />
-            <span>Solução Especializada para Zonas Rurais</span>
+            <span>Solução Especializada para Zonas Rurais em Santarém &amp; Região</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Bombeamento Solar Direct para <span className="text-amber-400">Chácaras, Sítios & Fazendas</span>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+            Bombeamento Solar Direct para <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400 bg-clip-text text-transparent">Chácaras, Sítios &amp; Fazendas</span>
           </h2>
-          <p className="text-slate-300 text-sm sm:text-base">
-            Água em abundância do nascer ao pôr do sol em poços artesianos, rios e reservatórios. 100% de autonomia sem depender da rede elétrica ou geradores a diesel.
+          <p className="text-slate-300 text-base sm:text-lg max-w-3xl mx-auto">
+            Água em abundância do nascer ao pôr do sol em poços artesianos, rios e reservatórios no Oeste do Pará. 100% de autonomia sem depender da rede elétrica ou geradores a diesel.
           </p>
         </div>
 

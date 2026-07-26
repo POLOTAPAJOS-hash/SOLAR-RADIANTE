@@ -7,30 +7,30 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-slate-950 border-t border-slate-800 text-slate-400 text-xs pt-16 pb-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <footer className="bg-slate-950 border-t border-slate-800 text-slate-400 text-xs pt-20 pb-14">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 space-y-12">
         
         {/* Top Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
           
           {/* Brand Info (4 cols) */}
           <div className="lg:col-span-4 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 via-orange-500 to-amber-600 shadow-md shadow-amber-500/20">
-                <Sun className="w-5 h-5 text-slate-950" />
+            <div className="flex items-center gap-3.5">
+              <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-slate-900 border border-amber-500/30 p-1 shadow-lg shadow-amber-500/20 overflow-hidden">
+                <img src="/solar-radiante-logo.svg" alt="Solar Radiante Logo" className="w-full h-full object-contain" />
               </div>
               <div className="flex flex-col">
-                <span className="text-lg font-black tracking-tight text-white">
+                <span className="text-xl font-black tracking-tight text-white leading-none">
                   SOLAR <span className="text-amber-400">RADIANTE</span>
                 </span>
-                <span className="text-[10px] uppercase font-semibold text-amber-200/80 tracking-widest -mt-1">
-                  Energia & Engenharia
+                <span className="text-[11px] uppercase font-bold text-amber-300/90 tracking-widest mt-1">
+                  Santarém &amp; Engenharia Solar
                 </span>
               </div>
             </div>
 
             <p className="text-slate-400 text-xs leading-relaxed">
-              Soluções completas em energia solar fotovoltaica, bombeamento para chácaras e sítios, subestações de média e alta tensão, e projetos elétricos registrados no CREA.
+              Soluções completas em energia solar fotovoltaica, bombeamento para chácaras e sítios no Oeste do Pará, subestações de média e alta tensão, e projetos elétricos registrados no CREA Pará.
             </p>
 
             <div className="flex items-center gap-2 text-[11px] font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-3 py-1.5 rounded-lg w-fit">

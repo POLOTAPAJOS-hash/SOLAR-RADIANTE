@@ -18,20 +18,20 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ onOpenQuoteM
     : PORTFOLIO_PROJECTS.filter((p) => p.category === selectedCategory);
 
   return (
-    <section id="portfolio" className="py-20 bg-slate-900 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="portfolio" className="py-24 sm:py-32 bg-slate-900 relative">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold">
+        <div className="text-center max-w-4xl mx-auto mb-16 space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs sm:text-sm font-bold">
             <ShieldCheck className="w-4 h-4" />
-            <span>Casos de Sucesso & Obras Entregues</span>
+            <span>Casos de Sucesso &amp; Obras Entregues em Santarém &amp; PA</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Nossa Experiência em <span className="text-amber-400">Projetos Executados</span>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+            Nossa Experiência em <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400 bg-clip-text text-transparent">Projetos Executados</span>
           </h2>
-          <p className="text-slate-300 text-sm sm:text-base">
-            Conheça algumas das usinas solares, sistemas de bombeamento e subestações instaladas com padrão de excelência Solar Radiante.
+          <p className="text-slate-300 text-base sm:text-lg max-w-3xl mx-auto">
+            Conheça algumas das usinas solares, sistemas de bombeamento e subestações instaladas em Santarém, Belterra e Oeste do Pará com padrão de excelência Solar Radiante.
           </p>
         </div>
 

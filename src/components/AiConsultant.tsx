@@ -91,20 +91,20 @@ export const AiConsultant: React.FC = () => {
   };
 
   return (
-    <section id="consultor-ia" className="py-20 bg-slate-950 relative overflow-hidden">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="consultor-ia" className="py-24 sm:py-32 bg-slate-950 relative overflow-hidden">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold">
-            <Sparkles className="w-4 h-4" />
-            <span>Assistente Técnico Inteligente</span>
+        <div className="text-center max-w-4xl mx-auto mb-12 space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs sm:text-sm font-bold">
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <span>Assistente Técnico Inteligente para Santarém &amp; Oeste do Pará</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Consultor Técnico de <span className="text-amber-400">Engenharia Solar IA</span>
+          <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+            Consultor Técnico de <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400 bg-clip-text text-transparent">Engenharia Solar IA</span>
           </h2>
-          <p className="text-slate-300 text-sm sm:text-base">
-            Tire suas dúvidas em tempo real sobre dimensionamento, regulamentação da ANEEL, homologação e bombeamento agrícola.
+          <p className="text-slate-300 text-base sm:text-lg max-w-3xl mx-auto">
+            Tire suas dúvidas em tempo real sobre dimensionamento solar, regulamentação ANEEL (Lei 14.300), homologação na Equatorial Pará e bombeamento para chácaras.
           </p>
         </div>
 

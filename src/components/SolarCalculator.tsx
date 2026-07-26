@@ -37,20 +37,20 @@ export const SolarCalculator: React.FC<SolarCalculatorProps> = ({ onOpenQuoteMod
   ];
 
   return (
-    <section id="calculadora" className="py-20 bg-slate-900 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="calculadora" className="py-24 sm:py-32 bg-slate-900 relative">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold">
+        <div className="text-center max-w-4xl mx-auto mb-16 space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs sm:text-sm font-bold">
             <Calculator className="w-4 h-4" />
             <span>Simulador de Economia em Tempo Real</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Descubra Quanto Você Vai Economizar Com <span className="text-amber-400">Energia Solar</span>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+            Descubra Quanto Você Vai Economizar Com <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400 bg-clip-text text-transparent">Energia Solar</span>
           </h2>
-          <p className="text-slate-300 text-sm sm:text-base">
-            Ajuste o valor da sua conta de luz atual e veja instantaneamente o tamanho do sistema fotovoltaico recomendado, prazo de retorno (Payback) e o ganho em 25 anos.
+          <p className="text-slate-300 text-base sm:text-lg max-w-3xl mx-auto">
+            Ajuste o valor da sua conta de luz atual da Equatorial Pará e veja instantaneamente o tamanho do sistema fotovoltaico recomendado para Santarém, o retorno do investimento (Payback) e o ganho acumulado em 25 anos.
           </p>
         </div>
 

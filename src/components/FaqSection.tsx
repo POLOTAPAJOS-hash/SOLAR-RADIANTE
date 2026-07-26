@@ -25,20 +25,20 @@ export const FaqSection: React.FC = () => {
   });
 
   return (
-    <section id="faq" className="py-20 bg-slate-950 relative">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="faq" className="py-24 sm:py-32 bg-slate-950 relative">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold">
-            <HelpCircle className="w-4 h-4" />
-            <span>Tire Suas Dúvidas</span>
+        <div className="text-center max-w-4xl mx-auto mb-16 space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs sm:text-sm font-bold">
+            <HelpCircle className="w-4 h-4 text-amber-400" />
+            <span>Tire Suas Dúvidas em Santarém</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Perguntas Frequentes Sobre <span className="text-amber-400">Energia Solar</span>
+          <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+            Perguntas Frequentes Sobre <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400 bg-clip-text text-transparent">Energia Solar</span>
           </h2>
-          <p className="text-slate-300 text-sm sm:text-base">
-            Respostas claras sobre durabilidade, financiamento, bombeamento solar e homologação junto à concessionária.
+          <p className="text-slate-300 text-base sm:text-lg max-w-3xl mx-auto">
+            Respostas claras sobre durabilidade dos módulos, financiamento, bombeamento solar direto e homologação junto à Equatorial Pará.
           </p>
         </div>
 

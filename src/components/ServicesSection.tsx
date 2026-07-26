@@ -35,19 +35,19 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenQuoteMod
   };
 
   return (
-    <section id="servicos" className="py-20 bg-slate-900 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="servicos" className="py-24 sm:py-32 bg-slate-900 relative">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12">
         
         {/* Section Title */}
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold">
+        <div className="text-center max-w-4xl mx-auto mb-16 space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs sm:text-sm font-bold">
             <ShieldCheck className="w-4 h-4" />
-            <span>Portfólio Completo de Engenharia</span>
+            <span>Portfólio Completo de Engenharia em Santarém &amp; Oeste do Pará</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Soluções Integradas em <span className="text-amber-400">Energia & Infraestrutura</span>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+            Soluções Integradas em <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400 bg-clip-text text-transparent">Energia &amp; Infraestrutura</span>
           </h2>
-          <p className="text-slate-300 text-sm sm:text-base">
+          <p className="text-slate-300 text-base sm:text-lg max-w-3xl mx-auto">
             Da geração fotovoltaica ao dimensionamento de subestações industriais e laudos técnicos registrados no CREA.
           </p>
         </div>

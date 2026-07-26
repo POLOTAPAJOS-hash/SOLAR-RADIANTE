@@ -12,29 +12,30 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuoteModal }) => {
   };
 
   return (
-    <section id="inicio" className="relative pt-28 lg:pt-36 pb-20 overflow-hidden bg-slate-950 text-white">
-      {/* Background glow effects */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-amber-500/20 via-orange-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-10 right-10 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+    <section id="inicio" className="relative pt-32 lg:pt-44 pb-28 overflow-hidden bg-slate-950 text-white">
+      {/* Background glow & uploaded image banner backdrop */}
+      <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[700px] lg:w-[900px] h-[700px] lg:h-[900px] pointer-events-none opacity-20 bg-[url('/solar-radiante-logo.svg')] bg-no-repeat bg-contain bg-center mix-blend-screen scale-110 filter blur-[1px]" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-amber-500/25 via-orange-500/15 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-10 right-10 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Grid Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-25 pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:5rem_5rem] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,#000_80%,transparent_100%)] opacity-30 pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
           {/* Left Column Text & CTAs */}
-          <div className="lg:col-span-7 space-y-6 text-left">
+          <div className="lg:col-span-7 space-y-8 text-left">
             
             {/* Top Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold backdrop-blur-sm shadow-inner">
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs sm:text-sm font-bold backdrop-blur-md shadow-lg shadow-amber-500/10">
               <Award className="w-4 h-4 text-amber-400" />
-              <span>Santarém & Oeste do Pará</span>
+              <span>Santarém &amp; Oeste do Pará</span>
               <span className="hidden sm:inline text-amber-400/60">• Engenharia Solar CREA Pará</span>
             </div>
 
             {/* Title */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.1]">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight text-white leading-[1.05]">
               Transforme a Luz do Sol em <br className="hidden sm:inline" />
               <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-orange-500 bg-clip-text text-transparent">
                 Economia Real e Autonomia
@@ -42,25 +43,25 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuoteModal }) => {
             </h1>
 
             {/* Description */}
-            <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed font-normal">
-              Projetos de engenharia solar e média/alta tensão sob medida para residências, comércio, indústrias e propriedades rurais em <strong>Santarém, Belterra e todo o Oeste do Pará</strong>. Reduza sua conta da Equatorial em até 95% com equipamentos Tier-1.
+            <p className="text-lg sm:text-xl text-slate-300 max-w-3xl leading-relaxed font-normal">
+              Projetos de engenharia solar e média/alta tensão sob medida para residências, comércio, indústrias e propriedades rurais em <strong className="text-amber-300">Santarém, Belterra e todo o Oeste do Pará</strong>. Reduza sua conta da Equatorial em até 95% com equipamentos Tier-1.
             </p>
 
             {/* Feature Checkpoints */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              <div className="flex items-center gap-2.5 text-sm text-slate-200 font-medium">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <div className="flex items-center gap-3 text-base text-slate-200 font-semibold bg-slate-900/60 p-3 rounded-2xl border border-slate-800">
                 <CheckCircle2 className="w-5 h-5 text-amber-400 flex-shrink-0" />
                 <span>Garantia de 25 anos nos Painéis N-Type</span>
               </div>
-              <div className="flex items-center gap-2.5 text-sm text-slate-200 font-medium">
+              <div className="flex items-center gap-3 text-base text-slate-200 font-semibold bg-slate-900/60 p-3 rounded-2xl border border-slate-800">
                 <CheckCircle2 className="w-5 h-5 text-amber-400 flex-shrink-0" />
                 <span>Projetos de Subestações Média/Alta Tensão</span>
               </div>
-              <div className="flex items-center gap-2.5 text-sm text-slate-200 font-medium">
+              <div className="flex items-center gap-3 text-base text-slate-200 font-semibold bg-slate-900/60 p-3 rounded-2xl border border-slate-800">
                 <CheckCircle2 className="w-5 h-5 text-amber-400 flex-shrink-0" />
                 <span>Bombeamento Solar sem Baterias p/ Poços</span>
               </div>
-              <div className="flex items-center gap-2.5 text-sm text-slate-200 font-medium">
+              <div className="flex items-center gap-3 text-base text-slate-200 font-semibold bg-slate-900/60 p-3 rounded-2xl border border-slate-800">
                 <CheckCircle2 className="w-5 h-5 text-amber-400 flex-shrink-0" />
                 <span>Homologação Chave na Mão (Turnkey)</span>
               </div>
@@ -70,17 +71,17 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuoteModal }) => {
             <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
               <button
                 onClick={() => scrollToSection('#calculadora')}
-                className="flex items-center justify-center gap-3 px-7 py-4 text-sm font-bold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 hover:from-amber-300 hover:to-orange-400 rounded-2xl shadow-xl shadow-amber-500/25 hover:shadow-amber-500/40 active:scale-98 transition-all group"
+                className="flex items-center justify-center gap-3 px-8 py-5 text-base font-extrabold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 hover:from-amber-300 hover:to-orange-400 rounded-2xl shadow-2xl shadow-amber-500/30 hover:shadow-amber-500/50 active:scale-98 transition-all group"
               >
                 <span>Simular Economia na Calculadora</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
               </button>
 
               <button
                 onClick={() => onOpenQuoteModal()}
-                className="flex items-center justify-center gap-2 px-6 py-4 text-sm font-semibold text-slate-200 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/80 hover:border-amber-500/40 rounded-2xl backdrop-blur-sm transition-all"
+                className="flex items-center justify-center gap-2.5 px-8 py-5 text-base font-bold text-slate-200 bg-slate-800/90 hover:bg-slate-700/90 border border-slate-700 hover:border-amber-500/50 rounded-2xl backdrop-blur-md transition-all shadow-lg"
               >
-                <Zap className="w-4 h-4 text-amber-400" />
+                <Zap className="w-5 h-5 text-amber-400" />
                 <span>Solicitar Estudo Grátis</span>
               </button>
             </div>
