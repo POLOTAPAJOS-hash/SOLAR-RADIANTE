@@ -9,7 +9,7 @@ interface SolarCalculatorProps {
 export const SolarCalculator: React.FC<SolarCalculatorProps> = ({ onOpenQuoteModalWithData }) => {
   const [billAmount, setBillAmount] = useState<number>(1200);
   const [connectionType, setConnectionType] = useState<'monofasico' | 'bifasico' | 'trifasico'>('bifasico');
-  const [selectedState, setSelectedState] = useState<string>('SP');
+  const [selectedState, setSelectedState] = useState<string>('PA');
   const [propertyType, setPropertyType] = useState<string>('Residencial');
 
   // Recalculate results dynamically
@@ -18,26 +18,22 @@ export const SolarCalculator: React.FC<SolarCalculatorProps> = ({ onOpenQuoteMod
   }, [billAmount, selectedState, connectionType]);
 
   const handleRequestQuote = () => {
-    const summaryText = `Simulação Solar Radiante:\n- Conta Atual: R$ ${billAmount.toLocaleString('pt-BR')}\n- Tipo: ${propertyType} (${connectionType})\n- Estado: ${selectedState}\n- Potência Estimada: ${results.systemPowerKwp} kWp (${results.estimatedPanels} painéis)\n- Economia Mensal Estimada: R$ ${results.monthlySavings.toLocaleString('pt-BR')}\n- Payback Estimado: ${results.paybackYears} anos`;
+    const summaryText = `Simulação Solar Radiante:\n- Conta Atual: R$ ${billAmount.toLocaleString('pt-BR')}\n- Tipo: ${propertyType} (${connectionType})\n- Região: Santarém / Oeste do Pará (${selectedState})\n- Potência Estimada: ${results.systemPowerKwp} kWp (${results.estimatedPanels} painéis)\n- Economia Mensal Estimada: R$ ${results.monthlySavings.toLocaleString('pt-BR')}\n- Payback Estimado: ${results.paybackYears} anos`;
     
     onOpenQuoteModalWithData(billAmount, summaryText);
   };
 
   const brazilianStates = [
+    { code: 'PA', name: 'Pará (Santarém & Oeste do Pará)' },
+    { code: 'AM', name: 'Amazonas' },
+    { code: 'AP', name: 'Amapá' },
+    { code: 'MA', name: 'Maranhão' },
+    { code: 'MT', name: 'Mato Grosso' },
     { code: 'SP', name: 'São Paulo' },
     { code: 'MG', name: 'Minas Gerais' },
     { code: 'RJ', name: 'Rio de Janeiro' },
     { code: 'PR', name: 'Paraná' },
-    { code: 'SC', name: 'Santa Catarina' },
-    { code: 'RS', name: 'Rio Grande do Sul' },
-    { code: 'GO', name: 'Goiás' },
     { code: 'DF', name: 'Distrito Federal' },
-    { code: 'MS', name: 'Mato Grosso do Sul' },
-    { code: 'MT', name: 'Mato Grosso' },
-    { code: 'BA', name: 'Bahia' },
-    { code: 'PE', name: 'Pernambuco' },
-    { code: 'CE', name: 'Ceará' },
-    { code: 'ES', name: 'Espírito Santo' },
   ];
 
   return (

@@ -21,8 +21,8 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
     fullName: '',
     phone: '',
     email: '',
-    city: '',
-    state: 'SP',
+    city: 'Santarém',
+    state: 'PA',
     propertyType: 'Residencial',
     monthlyBill: initialBillAmount ? String(initialBillAmount) : '1200',
     interestedServices: initialService ? [initialService] : ['Energia Solar Fotovoltaica'],
@@ -130,15 +130,31 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-300">Cidade *</label>
+                <label className="text-xs font-semibold text-slate-300">Cidade * (Santarém e Oeste do Pará)</label>
                 <input
                   type="text"
                   required
-                  placeholder="Ex: Campinas"
+                  placeholder="Ex: Santarém"
                   value={formData.city}
                   onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500"
                 />
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {['Santarém', 'Belterra', 'Alter do Chão', 'Mojuí dos Campos', 'Itaituba', 'Oriximiná'].map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, city: c })}
+                      className={`px-2 py-0.5 text-[10px] font-medium rounded-md border transition-all ${
+                        formData.city === c
+                          ? 'bg-amber-400 text-slate-950 border-amber-400 font-bold'
+                          : 'bg-slate-950 text-slate-400 border-slate-800 hover:border-slate-700'
+                      }`}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="space-y-1">

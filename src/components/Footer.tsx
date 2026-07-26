@@ -65,11 +65,11 @@ export const Footer: React.FC = () => {
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
-                <span className="text-slate-300">Av. Engenheiro Solar, 1200 - Centro Tecnológico / SP</span>
+                <span className="text-slate-300">Av. Fernando Guilhon, 2500 - Santarém / PA (Oeste do Pará)</span>
               </li>
               <li className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                <span className="text-slate-300">Seg. a Sex. das 08h às 18h | Sáb. das 08h às 12h</span>
+                <span className="text-slate-300">Atendimento: Santarém, Belterra, Itaituba e Região</span>
               </li>
             </ul>
           </div>

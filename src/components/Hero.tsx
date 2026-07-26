@@ -29,8 +29,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuoteModal }) => {
             {/* Top Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold backdrop-blur-sm shadow-inner">
               <Award className="w-4 h-4 text-amber-400" />
-              <span>Engenharia Elétrica & Energia Solar de Alta Performance</span>
-              <span className="hidden sm:inline text-amber-400/60">• CREA Registrado</span>
+              <span>Santarém & Oeste do Pará</span>
+              <span className="hidden sm:inline text-amber-400/60">• Engenharia Solar CREA Pará</span>
             </div>
 
             {/* Title */}
@@ -43,7 +43,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuoteModal }) => {
 
             {/* Description */}
             <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed font-normal">
-              Projetos de engenharia solar e alta tensão sob medida para residências, comércio, indústrias e propriedades rurais. Reduza sua conta de luz em até 95% com equipamentos Tier-1 e suporte técnico especializado.
+              Projetos de engenharia solar e média/alta tensão sob medida para residências, comércio, indústrias e propriedades rurais em <strong>Santarém, Belterra e todo o Oeste do Pará</strong>. Reduza sua conta da Equatorial em até 95% com equipamentos Tier-1.
             </p>
 
             {/* Feature Checkpoints */}

@@ -9,9 +9,9 @@ import { SolarCalculationResult, PumpingCalculationResult } from '../types';
  */
 export function calculateSolarSystem(
   monthlyBill: number,
-  state: string = 'SP',
+  state: string = 'PA',
   connectionType: 'monofasico' | 'bifasico' | 'trifasico' = 'bifasico',
-  energyTariff: number = 0.95
+  energyTariff: number = 0.98
 ): SolarCalculationResult {
   // Minimum connection availability fee (kWh)
   const minimumKwhMap = {
