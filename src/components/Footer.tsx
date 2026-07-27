@@ -21,10 +21,10 @@ export const Footer: React.FC = () => {
               </div>
               <div className="flex flex-col">
                 <span className="text-2xl sm:text-3xl font-black tracking-tight text-blue-400 drop-shadow-md leading-none">
-                  SOLAR RADIANTE
+                  SOLAR RADIANTE SANTARÉM
                 </span>
                 <span className="text-xs uppercase font-bold text-blue-300/90 tracking-widest mt-1">
-                  Santarém &amp; Engenharia Solar
+                  Manutenção, Instalação &amp; Eletrotécnica Solar
                 </span>
               </div>
             </div>
