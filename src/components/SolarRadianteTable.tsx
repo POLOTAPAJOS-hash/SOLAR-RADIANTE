@@ -22,7 +22,11 @@ import {
   TrendingUp,
   Percent,
   Sparkles,
-  Zap
+  Zap,
+  Save,
+  X,
+  Copy,
+  Sliders
 } from 'lucide-react';
 import {
   SolarRadianteKit,
@@ -36,6 +40,26 @@ interface SolarRadianteTableProps {
   onOpenQuoteModalWithKit: (kitSummary: string, notes?: string) => void;
 }
 
+export interface CompanyDetails {
+  name: string;
+  cnpj: string;
+  address: string;
+  email: string;
+  phone: string;
+  instagram: string;
+  titleBadge: string;
+}
+
+const DEFAULT_COMPANY_DETAILS: CompanyDetails = {
+  name: 'Solar Radiante Empreendimentos LTDA',
+  cnpj: '11.714.619/0001-84',
+  address: 'Alameda vinte e dois, Nº 70, Aeroporto Velho, Santarém-Pá',
+  email: 'solarradiante@gmail.com',
+  phone: '(93) 99121-1156',
+  instagram: '@solarradiante',
+  titleBadge: 'Kits Sistemas Fotovoltaicos Ongrid'
+};
+
 export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
   onOpenQuoteModalWithKit
 }) => {
@@ -43,14 +67,30 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
   const [kits, setKits] = useState<SolarRadianteKit[]>([]);
   const [activeTab, setActiveTab] = useState<'catalog' | 'admin'>('catalog');
   
-  // Admin authentication state (simple toggle or pin for smooth user experience)
-  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(true);
-  
+  // Admin Mode State (Enabled by default for instant editing capability)
+  const [isAdminMode, setIsAdminMode] = useState<boolean>(true);
+
+  // Company Details State
+  const [companyDetails, setCompanyDetails] = useState<CompanyDetails>(() => {
+    try {
+      const saved = localStorage.getItem('solar_radiante_company_details');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error('Error reading company details:', e);
+    }
+    return DEFAULT_COMPANY_DETAILS;
+  });
+  const [isEditingCompanyHeader, setIsEditingCompanyHeader] = useState<boolean>(false);
+
   // Search & Filter state
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedPowerFilter, setSelectedPowerFilter] = useState<string>('Todos');
 
-  // Form State for Creating / Editing Kit
+  // Inline Row Editing State
+  const [inlineEditingId, setInlineEditingId] = useState<string | null>(null);
+  const [inlineKitData, setInlineKitData] = useState<SolarRadianteKit | null>(null);
+
+  // Form State for Creating / Editing Kit in Admin Panel
   const [editingKitId, setEditingKitId] = useState<string | null>(null);
   const [formKwhMes, setFormKwhMes] = useState<number>(600);
   const [formQtdModulos, setFormQtdModulos] = useState<number>(7);
@@ -76,6 +116,16 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
     setKits(loaded);
   }, []);
 
+  // Save company details when updated
+  const saveCompanyDetails = (details: CompanyDetails) => {
+    setCompanyDetails(details);
+    try {
+      localStorage.setItem('solar_radiante_company_details', JSON.stringify(details));
+    } catch (e) {
+      console.error('Error saving company details:', e);
+    }
+  };
+
   // Show status notification toast
   const showToast = (msg: string) => {
     setStatusMessage(msg);
@@ -100,7 +150,7 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
     setFormCartao(calculatedCartao);
   }, [formQtdModulos, formPotenciaModulo, formValorAVista]);
 
-  // Handle Save / Add Kit
+  // Handle Save / Add Kit in Admin Panel
   const handleSaveKit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -171,8 +221,58 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
     setFormBadge('');
   };
 
-  // Start Editing
+  // Start Inline Row Editing in Main Table
+  const handleStartInlineEdit = (kit: SolarRadianteKit) => {
+    setInlineEditingId(kit.id);
+    setInlineKitData({ ...kit });
+  };
+
+  // Save Inline Row Changes
+  const handleSaveInlineEdit = () => {
+    if (!inlineKitData || !inlineEditingId) return;
+
+    // Recalculate kWp and Generation if modules/power changed
+    const kwp = Number(((inlineKitData.qtdModulos * (inlineKitData.potenciaModuloWatts || 700)) / 1000).toFixed(2));
+    const geracao = Math.round(kwp * 127.5);
+
+    const updatedKit: SolarRadianteKit = {
+      ...inlineKitData,
+      kwp,
+      geracaoEstimada: inlineKitData.geracaoEstimada || geracao
+    };
+
+    const updatedList = kits.map(k => k.id === inlineEditingId ? updatedKit : k);
+    setKits(updatedList);
+    saveSolarRadianteKits(updatedList);
+
+    setInlineEditingId(null);
+    setInlineKitData(null);
+    showToast(`Kit ${kwp} kWp salvo diretamente na tabela!`);
+  };
+
+  // Cancel Inline Row Editing
+  const handleCancelInlineEdit = () => {
+    setInlineEditingId(null);
+    setInlineKitData(null);
+  };
+
+  // Quick Duplicate Row
+  const handleDuplicateRow = (kit: SolarRadianteKit) => {
+    const duplicated: SolarRadianteKit = {
+      ...kit,
+      id: `sr-dup-${Date.now()}`,
+      kwp: kit.kwp + 0.1,
+      badge: 'Cópia Editável'
+    };
+    const updated = [...kits, duplicated].sort((a, b) => a.kwp - b.kwp);
+    setKits(updated);
+    saveSolarRadianteKits(updated);
+    showToast(`Kit de ${kit.kwp} kWp duplicado com sucesso!`);
+  };
+
+  // Start Editing via Admin Form
   const handleStartEdit = (kit: SolarRadianteKit) => {
+    setActiveTab('admin');
     setEditingKitId(kit.id);
     setFormKwhMes(kit.kwhMes);
     setFormQtdModulos(kit.qtdModulos);
@@ -186,7 +286,9 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
     setFormBadge(kit.badge || '');
 
     // Scroll to form smoothly
-    window.scrollTo({ top: document.getElementById('admin-kit-form')?.offsetTop || 0, behavior: 'smooth' });
+    setTimeout(() => {
+      window.scrollTo({ top: document.getElementById('admin-kit-form')?.offsetTop || 0, behavior: 'smooth' });
+    }, 100);
   };
 
   // Delete Kit
@@ -199,6 +301,35 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
     }
   };
 
+  // Add Quick Blank Row
+  const handleAddQuickRow = () => {
+    const lastKit = kits[kits.length - 1];
+    const newKwh = (lastKit?.kwhMes || 1000) + 100;
+    const newModules = (lastKit?.qtdModulos || 12) + 1;
+    const newKwp = Number(((newModules * 700) / 1000).toFixed(2));
+    const newVista = (lastKit?.valorAVista || 16000) + 1000;
+
+    const newKit: SolarRadianteKit = {
+      id: `sr-quick-${Date.now()}`,
+      kwhMes: newKwh,
+      geracaoEstimada: Math.round(newKwp * 127.5),
+      kwp: newKwp,
+      qtdModulos: newModules,
+      potenciaModuloWatts: 700,
+      inversor: 'Novo Inversor',
+      valorAVista: newVista,
+      valorFinanciado: Number(((newVista * 1.35) / 36).toFixed(2)),
+      valorCartao: Number(((newVista * 1.14) / 12).toFixed(2)),
+      badge: 'Novo Kit'
+    };
+
+    const updated = [...kits, newKit].sort((a, b) => a.kwp - b.kwp);
+    setKits(updated);
+    saveSolarRadianteKits(updated);
+    handleStartInlineEdit(newKit);
+    showToast('Novo kit adicionado! Preencha as células diretamente.');
+  };
+
   // Reset to default 31 kits from official table
   const handleResetToDefault = () => {
     if (window.confirm('Deseja restaurar a Tabela Oficial Solar Radiante com os 31 Kits originais? Todas as alterações personalizadas serão redefinidas.')) {
@@ -206,6 +337,13 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
       saveSolarRadianteKits(DEFAULT_SOLAR_RADIANTE_KITS);
       showToast('Tabela de Kits oficial restaurada com sucesso!');
     }
+  };
+
+  // Reset Company Details to Default
+  const handleResetCompanyDetails = () => {
+    saveCompanyDetails(DEFAULT_COMPANY_DETAILS);
+    setIsEditingCompanyHeader(false);
+    showToast('Cabeçalho da empresa restaurado ao padrão original!');
   };
 
   // Batch Price Adjustment (e.g., +5% or -10%)
@@ -278,7 +416,7 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
     const kwCalculated = transformKwpToKw(kit.kwp, 1.20);
     const summary = `Cotação Kit Ongrid Solar Radiante - ${kit.kwp} kWp (~${kwCalculated} kW):\n` +
       `• Consumo Alvo: ~${kit.kwhMes} kWh/mês (Geração Est.: ${kit.geracaoEstimada} kWh/mês)\n` +
-      `• Potência Instalada: ${kit.kwp} kWp (${kit.qtdModulos} Módulos de ${kit.potenciaModuloWatts}W)\n` +
+      `• Potência Instalada: ${kit.kwp} kWp (${kit.qtdModulos} Módulos de ${kit.potenciaModuloWatts || 700}W)\n` +
       `• Inversor: ${kit.inversor}\n` +
       `• Valor À Vista: ${formatBRL(kit.valorAVista)}\n` +
       `• Parcela Financiado: ${formatBRL(kit.valorFinanciado)} /mês\n` +
@@ -298,54 +436,604 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
         </div>
       )}
 
-      <div className="max-w-[1650px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Top Header Navigation for Tabs */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8 bg-slate-900/90 p-4 rounded-3xl border border-slate-800 shadow-xl">
-          <div className="flex items-center gap-3">
+        {/* Top Header Navigation for Tabs & Admin Toggle */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6 bg-slate-900/90 p-4 sm:p-5 rounded-3xl border border-slate-800 shadow-xl">
+          <div className="flex items-center gap-3.5">
             <div className="p-3 bg-amber-400/20 text-amber-400 rounded-2xl border border-amber-400/30">
-              <Sun className="w-6 h-6" />
+              <Sun className="w-7 h-7" />
             </div>
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                Tabela Oficial de Kits Sistemas Fotovoltaicos Ongrid
-              </h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                  Tabela Oficial de Kits Fotovoltaicos Ongrid
+                </h2>
+                {isAdminMode && (
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[11px] font-black uppercase flex items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    Admin Ativo
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-slate-400">
-                Solar Radiante Empreendimentos LTDA • CNPJ: 11.714.619/0001-84
+                {companyDetails.name} • CNPJ: {companyDetails.cnpj}
               </p>
             </div>
           </div>
 
-          {/* Mode Switcher Buttons */}
-          <div className="flex items-center gap-2 bg-slate-950 p-1.5 rounded-2xl border border-slate-800">
+          {/* Controls: Admin Privileges & View Switcher */}
+          <div className="flex flex-wrap items-center gap-3">
+            
+            {/* Toggle Admin Mode Button */}
             <button
-              onClick={() => setActiveTab('catalog')}
-              className={`px-5 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-                activeTab === 'catalog'
-                  ? 'bg-amber-400 text-slate-950 shadow-lg shadow-amber-500/20'
-                  : 'text-slate-400 hover:text-white'
+              onClick={() => {
+                setIsAdminMode(!isAdminMode);
+                showToast(!isAdminMode ? 'Privilégios de Administrador Ativados!' : 'Modo Administrador Desativado.');
+              }}
+              className={`px-4 py-2.5 rounded-2xl text-xs font-black transition-all border flex items-center gap-2 shadow-md ${
+                isAdminMode
+                  ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 border-emerald-400 shadow-emerald-500/20'
+                  : 'bg-slate-800 hover:bg-slate-700 text-amber-300 border-amber-500/40'
               }`}
             >
-              <FileSpreadsheet className="w-4 h-4" />
-              <span>Tabela de Kits (Cliente)</span>
+              {isAdminMode ? <Unlock className="w-4 h-4 text-slate-950" /> : <Lock className="w-4 h-4 text-amber-400" />}
+              <span>{isAdminMode ? 'Privilégios Admin (ON)' : 'Ativar Modo Admin'}</span>
             </button>
 
-            <button
-              onClick={() => setActiveTab('admin')}
-              className={`px-5 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-                activeTab === 'admin'
-                  ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 shadow-lg shadow-amber-500/25'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <Plus className="w-4 h-4" />
-              <span>Aba do Administrador (Criar &amp; Gerenciar)</span>
-            </button>
+            {/* Mode Switcher Tabs */}
+            <div className="flex items-center gap-1.5 bg-slate-950 p-1.5 rounded-2xl border border-slate-800">
+              <button
+                onClick={() => setActiveTab('catalog')}
+                className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
+                  activeTab === 'catalog'
+                    ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-500/20'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <FileSpreadsheet className="w-4 h-4" />
+                <span>Visão Tabela</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('admin')}
+                className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
+                  activeTab === 'admin'
+                    ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 shadow-md shadow-amber-500/25'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Plus className="w-4 h-4" />
+                <span>Painel Criar/Form</span>
+              </button>
+            </div>
+
           </div>
         </div>
 
+        {/* Admin Privilege Banner */}
+        {isAdminMode && (
+          <div className="mb-6 bg-gradient-to-r from-amber-500/20 via-slate-900 to-emerald-500/20 border-2 border-amber-400/40 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-amber-400 text-slate-950 rounded-xl font-black">
+                <Sliders className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-sm font-extrabold text-amber-300">
+                  ⚡ MODO DE EDIÇÃO ADMINISTRATIVA ATIVO
+                </p>
+                <p className="text-xs text-slate-300">
+                  Você pode editar qualquer célula diretamente na tabela, alterar os dados do cabeçalho, criar novos kits, reajustar valores em lote e exportar dados.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <button
+                onClick={handleAddQuickRow}
+                className="px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Adicionar Linha Rápida</span>
+              </button>
+
+              <button
+                onClick={() => setShowBatchModal(true)}
+                className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center gap-1.5 transition-all"
+              >
+                <Percent className="w-4 h-4 text-amber-400" />
+                <span>Reajuste em Lote</span>
+              </button>
+
+              <button
+                onClick={handleExportCSV}
+                className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/40 text-xs font-bold flex items-center gap-1.5 transition-all"
+              >
+                <Download className="w-4 h-4 text-emerald-400" />
+                <span>CSV</span>
+              </button>
+
+              <button
+                onClick={handleResetToDefault}
+                className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold flex items-center gap-1.5 transition-all"
+                title="Restaurar tabela original com 31 kits"
+              >
+                <RefreshCw className="w-4 h-4 text-slate-400" />
+                <span>Reset Tabela</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Batch Price Adjustment Modal */}
+        {showBatchModal && (
+          <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+            <div className="bg-slate-900 border border-amber-500/40 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-5">
+              <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
+                <div className="p-2.5 bg-amber-400/20 text-amber-400 rounded-xl">
+                  <TrendingUp className="w-6 h-6" />
+                </div>
+                <div>
+                  <h4 className="font-black text-lg text-white">Reajuste de Preços em Lote</h4>
+                  <p className="text-xs text-slate-400">Aplique um aumento ou desconto percentual em todos os {kits.length} kits simultaneamente.</p>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-300 uppercase">Percentual de Ajuste (%)</label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    step="0.5"
+                    value={batchPercent}
+                    onChange={(e) => setBatchPercent(Number(e.target.value))}
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-2xl font-black text-amber-400 outline-none"
+                    placeholder="Ex: 5 ou -10"
+                  />
+                  <span className="text-lg font-bold text-slate-400">%</span>
+                </div>
+                <p className="text-[11px] text-slate-400">
+                  Exemplo: Digite <strong>5</strong> para aumentar 5% ou <strong>-10</strong> para dar 10% de desconto.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 pt-2">
+                <button
+                  onClick={handleApplyBatchAdjustment}
+                  className="flex-1 py-3 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase rounded-xl transition-all"
+                >
+                  Aplicar Reajuste em Todos
+                </button>
+                <button
+                  onClick={() => setShowBatchModal(false)}
+                  className="py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* ========================================================================= */}
-        {/* TAB 1: ADMIN MANAGEMENT MODE ("Aba para Criar e Gerenciar Kits")          */}
+        {/* TAB 1: CLIENT OFFICIAL TABLE VIEW WITH INLINE ADMIN EDITING               */}
+        {/* ========================================================================= */}
+        {activeTab === 'catalog' && (
+          <div className="space-y-8 animate-fade-in">
+            
+            {/* Filter & Search Bar */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/90 p-4 rounded-3xl border border-slate-800">
+              
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs font-bold text-slate-400 uppercase mr-1">Filtrar Categoria:</span>
+                {[
+                  'Todos',
+                  'Residencial (Até 10 kWp)',
+                  'Comercial (10 a 35 kWp)',
+                  'Usina / Indústria (> 35 kWp)'
+                ].map((filter) => (
+                  <button
+                    key={filter}
+                    onClick={() => setSelectedPowerFilter(filter)}
+                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
+                      selectedPowerFilter === filter
+                        ? 'bg-amber-400 text-slate-950 border-amber-400 shadow-md shadow-amber-500/20'
+                        : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
+                    }`}
+                  >
+                    {filter}
+                  </button>
+                ))}
+              </div>
+
+              <div className="relative w-full sm:w-72">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Pesquisar consumo kWh, kWp ou inversor..."
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-xs text-white outline-none focus:border-amber-400"
+                />
+              </div>
+
+            </div>
+
+            {/* Official Table Canvas */}
+            <div className="bg-slate-900 border-2 border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+              
+              {/* Header Card with Editable Company Info when Admin Mode is ON */}
+              <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 text-center border-b border-amber-400/30 relative overflow-hidden">
+                <div className="absolute inset-0 bg-amber-500/5 blur-2xl pointer-events-none" />
+                
+                {isAdminMode && (
+                  <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+                    <button
+                      onClick={() => setIsEditingCompanyHeader(!isEditingCompanyHeader)}
+                      className="px-3 py-1.5 rounded-xl bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/40 text-xs font-bold flex items-center gap-1.5 transition-all"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span>{isEditingCompanyHeader ? 'Fechar Edição' : 'Editar Cabeçalho'}</span>
+                    </button>
+                  </div>
+                )}
+
+                {/* Editable Company Header Form */}
+                {isEditingCompanyHeader && isAdminMode ? (
+                  <div className="relative z-10 max-w-3xl mx-auto bg-slate-950/90 p-5 rounded-2xl border border-amber-400/40 text-left space-y-4 my-2">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                      <span className="text-xs font-black text-amber-400 uppercase">Editar Dados do Cabeçalho da Tabela</span>
+                      <button onClick={handleResetCompanyDetails} className="text-[11px] text-slate-400 hover:text-amber-300 underline">Restaurar Padrão</button>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-400 block mb-1">Nome da Empresa</label>
+                        <input
+                          type="text"
+                          value={companyDetails.name}
+                          onChange={(e) => saveCompanyDetails({ ...companyDetails, name: e.target.value })}
+                          className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-white font-bold"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-400 block mb-1">CNPJ</label>
+                        <input
+                          type="text"
+                          value={companyDetails.cnpj}
+                          onChange={(e) => saveCompanyDetails({ ...companyDetails, cnpj: e.target.value })}
+                          className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-white font-bold"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-400 block mb-1">Título Badge da Tabela</label>
+                        <input
+                          type="text"
+                          value={companyDetails.titleBadge}
+                          onChange={(e) => saveCompanyDetails({ ...companyDetails, titleBadge: e.target.value })}
+                          className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-white font-bold"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-400 block mb-1">Endereço</label>
+                        <input
+                          type="text"
+                          value={companyDetails.address}
+                          onChange={(e) => saveCompanyDetails({ ...companyDetails, address: e.target.value })}
+                          className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-white font-bold"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-400 block mb-1">E-mail</label>
+                        <input
+                          type="text"
+                          value={companyDetails.email}
+                          onChange={(e) => saveCompanyDetails({ ...companyDetails, email: e.target.value })}
+                          className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-white font-bold"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] font-bold text-slate-400 block mb-1">Telefone / Contato</label>
+                        <input
+                          type="text"
+                          value={companyDetails.phone}
+                          onChange={(e) => saveCompanyDetails({ ...companyDetails, phone: e.target.value })}
+                          className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-white font-bold"
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        setIsEditingCompanyHeader(false);
+                        showToast('Dados da empresa salvos!');
+                      }}
+                      className="w-full py-2 bg-amber-400 text-slate-950 font-black text-xs uppercase rounded-xl"
+                    >
+                      Salvar Cabeçalho
+                    </button>
+                  </div>
+                ) : (
+                  <div className="relative z-10 space-y-2">
+                    <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-amber-400/10 border border-amber-400/20 text-amber-400 mb-1">
+                      <Sun className="w-8 h-8" />
+                    </div>
+
+                    <h1 className="text-2xl sm:text-3xl font-black text-amber-400 tracking-wider uppercase">
+                      {companyDetails.name}
+                    </h1>
+                    
+                    <p className="text-xs font-bold text-slate-300">
+                      CNPJ: {companyDetails.cnpj}
+                    </p>
+
+                    <div className="pt-2">
+                      <span className="inline-block px-6 py-2 rounded-full bg-amber-400 text-slate-950 font-black text-sm sm:text-base uppercase tracking-widest shadow-lg">
+                        {companyDetails.titleBadge}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Table Data */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-center border-collapse">
+                  <thead>
+                    <tr className="bg-amber-400 text-slate-950 text-xs sm:text-sm font-black uppercase tracking-wider border-b-2 border-amber-500">
+                      <th className="py-4 px-3 border-r border-amber-500/30">KWH Mês</th>
+                      <th className="py-4 px-3 border-r border-amber-500/30">Geração Estimada</th>
+                      <th className="py-4 px-3 border-r border-amber-500/30">kWp</th>
+                      <th className="py-4 px-3 border-r border-amber-500/30">Qtd módulos 700W</th>
+                      <th className="py-4 px-3 border-r border-amber-500/30">Inversor</th>
+                      <th className="py-4 px-3 border-r border-amber-500/30 bg-amber-300 text-slate-950">Valor Kit A vista R$</th>
+                      <th className="py-4 px-3 border-r border-amber-500/30">Financiado R$</th>
+                      <th className="py-4 px-3 border-r border-amber-500/30">Cartão R$</th>
+                      <th className="py-4 px-3">
+                        {isAdminMode ? 'Ações de Administrador' : 'Solicitar Cotação'}
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody className="divide-y divide-slate-800 text-xs sm:text-sm font-bold">
+                    {filteredKits.map((kit, index) => {
+                      const isEditingThisRow = inlineEditingId === kit.id;
+
+                      return (
+                        <tr
+                          key={kit.id}
+                          className={`transition-colors ${
+                            isEditingThisRow
+                              ? 'bg-amber-500/20 border-2 border-amber-400'
+                              : index % 2 === 0
+                              ? 'bg-amber-400/5 hover:bg-amber-400/10'
+                              : 'bg-slate-950/60 hover:bg-amber-400/10'
+                          }`}
+                        >
+                          {/* KWH Mês */}
+                          <td className="py-3 px-2 font-extrabold text-amber-300 border-r border-slate-800/60">
+                            {isEditingThisRow && inlineKitData ? (
+                              <input
+                                type="number"
+                                value={inlineKitData.kwhMes}
+                                onChange={(e) => setInlineKitData({ ...inlineKitData, kwhMes: Number(e.target.value) })}
+                                className="w-20 bg-slate-900 border border-amber-400 text-amber-300 px-2 py-1 rounded text-center font-bold"
+                              />
+                            ) : (
+                              kit.kwhMes.toLocaleString('pt-BR')
+                            )}
+                          </td>
+
+                          {/* Geração Estimada */}
+                          <td className="py-3 px-2 font-bold text-emerald-400 border-r border-slate-800/60">
+                            {isEditingThisRow && inlineKitData ? (
+                              <input
+                                type="number"
+                                value={inlineKitData.geracaoEstimada}
+                                onChange={(e) => setInlineKitData({ ...inlineKitData, geracaoEstimada: Number(e.target.value) })}
+                                className="w-20 bg-slate-900 border border-amber-400 text-emerald-400 px-2 py-1 rounded text-center font-bold"
+                              />
+                            ) : (
+                              kit.geracaoEstimada.toLocaleString('pt-BR')
+                            )}
+                          </td>
+
+                          {/* kWp */}
+                          <td className="py-3 px-2 font-black text-amber-400 text-base border-r border-slate-800/60">
+                            {isEditingThisRow && inlineKitData ? (
+                              <input
+                                type="number"
+                                step="0.01"
+                                value={inlineKitData.kwp}
+                                onChange={(e) => setInlineKitData({ ...inlineKitData, kwp: Number(e.target.value) })}
+                                className="w-20 bg-slate-900 border border-amber-400 text-amber-400 px-2 py-1 rounded text-center font-bold"
+                              />
+                            ) : (
+                              kit.kwp.toFixed(2)
+                            )}
+                          </td>
+
+                          {/* Qtd Módulos */}
+                          <td className="py-3 px-2 text-slate-100 font-bold border-r border-slate-800/60">
+                            {isEditingThisRow && inlineKitData ? (
+                              <input
+                                type="number"
+                                value={inlineKitData.qtdModulos}
+                                onChange={(e) => setInlineKitData({ ...inlineKitData, qtdModulos: Number(e.target.value) })}
+                                className="w-16 bg-slate-900 border border-amber-400 text-white px-2 py-1 rounded text-center font-bold"
+                              />
+                            ) : (
+                              kit.qtdModulos
+                            )}
+                          </td>
+
+                          {/* Inversor */}
+                          <td className="py-3 px-2 text-slate-200 border-r border-slate-800/60">
+                            {isEditingThisRow && inlineKitData ? (
+                              <input
+                                type="text"
+                                value={inlineKitData.inversor}
+                                onChange={(e) => setInlineKitData({ ...inlineKitData, inversor: e.target.value })}
+                                className="w-28 bg-slate-900 border border-amber-400 text-white px-2 py-1 rounded text-center font-bold text-xs"
+                              />
+                            ) : (
+                              kit.inversor
+                            )}
+                          </td>
+
+                          {/* Valor À Vista */}
+                          <td className="py-3 px-2 font-black text-amber-300 text-sm bg-amber-400/10 border-r border-slate-800/60">
+                            {isEditingThisRow && inlineKitData ? (
+                              <input
+                                type="number"
+                                step="50"
+                                value={inlineKitData.valorAVista}
+                                onChange={(e) => {
+                                  const val = Number(e.target.value);
+                                  setInlineKitData({
+                                    ...inlineKitData,
+                                    valorAVista: val,
+                                    valorFinanciado: Number(((val * 1.35) / 36).toFixed(2)),
+                                    valorCartao: Number(((val * 1.14) / 12).toFixed(2))
+                                  });
+                                }}
+                                className="w-28 bg-slate-900 border border-amber-400 text-amber-300 px-2 py-1 rounded text-center font-bold text-xs"
+                              />
+                            ) : (
+                              formatBRL(kit.valorAVista)
+                            )}
+                          </td>
+
+                          {/* Financiado */}
+                          <td className="py-3 px-2 text-blue-300 font-bold border-r border-slate-800/60">
+                            {isEditingThisRow && inlineKitData ? (
+                              <input
+                                type="number"
+                                step="0.01"
+                                value={inlineKitData.valorFinanciado}
+                                onChange={(e) => setInlineKitData({ ...inlineKitData, valorFinanciado: Number(e.target.value) })}
+                                className="w-24 bg-slate-900 border border-amber-400 text-blue-300 px-2 py-1 rounded text-center font-bold text-xs"
+                              />
+                            ) : (
+                              formatBRL(kit.valorFinanciado)
+                            )}
+                          </td>
+
+                          {/* Cartão */}
+                          <td className="py-3 px-2 text-purple-300 font-bold border-r border-slate-800/60">
+                            {isEditingThisRow && inlineKitData ? (
+                              <input
+                                type="number"
+                                step="0.01"
+                                value={inlineKitData.valorCartao}
+                                onChange={(e) => setInlineKitData({ ...inlineKitData, valorCartao: Number(e.target.value) })}
+                                className="w-24 bg-slate-900 border border-amber-400 text-purple-300 px-2 py-1 rounded text-center font-bold text-xs"
+                              />
+                            ) : (
+                              formatBRL(kit.valorCartao)
+                            )}
+                          </td>
+
+                          {/* Action Button / Admin Tools */}
+                          <td className="py-3 px-2">
+                            {isEditingThisRow ? (
+                              <div className="flex items-center justify-center gap-1">
+                                <button
+                                  onClick={handleSaveInlineEdit}
+                                  className="p-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black shadow transition-all"
+                                  title="Salvar alterações"
+                                >
+                                  <Save className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={handleCancelInlineEdit}
+                                  className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all"
+                                  title="Cancelar"
+                                >
+                                  <X className="w-4 h-4" />
+                                </button>
+                              </div>
+                            ) : isAdminMode ? (
+                              <div className="flex items-center justify-center gap-1.5 flex-wrap">
+                                <button
+                                  onClick={() => handleStartInlineEdit(kit)}
+                                  className="p-1.5 rounded-lg bg-amber-400/20 hover:bg-amber-400/40 text-amber-300 border border-amber-400/30 transition-all"
+                                  title="Editar linha diretamente"
+                                >
+                                  <Edit3 className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={() => handleDuplicateRow(kit)}
+                                  className="p-1.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/40 text-blue-300 border border-blue-500/30 transition-all"
+                                  title="Duplicar linha"
+                                >
+                                  <Copy className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteKit(kit.id, kit.kwp)}
+                                  className="p-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-300 border border-red-500/30 transition-all"
+                                  title="Excluir linha"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={() => handleRequestQuote(kit)}
+                                  className="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] uppercase font-bold"
+                                  title="Testar Cotação"
+                                >
+                                  Cotar
+                                </button>
+                              </div>
+                            ) : (
+                              <button
+                                onClick={() => handleRequestQuote(kit)}
+                                className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-black text-[11px] uppercase tracking-wider hover:brightness-110 shadow-md transition-all flex items-center justify-center gap-1"
+                              >
+                                <span>Cotar</span>
+                                <ArrowRight className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Table Footer replicating image footer */}
+              <div className="bg-slate-950 p-6 border-t border-slate-800 text-xs text-slate-300 text-center space-y-2">
+                <p className="font-bold text-amber-400">
+                  Endereço: {companyDetails.address}
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-6 text-slate-400 pt-1">
+                  <span className="flex items-center gap-1.5">
+                    <Mail className="w-4 h-4 text-amber-400" />
+                    {companyDetails.email}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Phone className="w-4 h-4 text-emerald-400" />
+                    Contato: {companyDetails.phone}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Instagram className="w-4 h-4 text-pink-400" />
+                    Instagram: {companyDetails.instagram}
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB 2: ADMIN FORM PANEL ("Criar & Gerenciar Kits Detalhadamente")        */}
         {/* ========================================================================= */}
         {activeTab === 'admin' && (
           <div className="space-y-10 animate-fade-in">
@@ -353,7 +1041,7 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
             {/* Create / Edit Form Card */}
             <div id="admin-kit-form" className="bg-slate-900 border-2 border-amber-400/40 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
               <div className="absolute top-0 right-0 px-6 py-2 bg-amber-400 text-slate-950 font-black text-xs rounded-bl-2xl uppercase tracking-wider">
-                {editingKitId ? 'Modo de Edição de Kit' : 'Novo Kit - Criar pelo Administrador'}
+                {editingKitId ? 'Modo de Edição de Kit' : 'Novo Kit - Formulário Completo'}
               </div>
 
               <div className="flex items-center gap-3 mb-6">
@@ -598,56 +1286,6 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
               </div>
             </div>
 
-            {/* Batch Price Adjustment Modal */}
-            {showBatchModal && (
-              <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-                <div className="bg-slate-900 border border-amber-500/40 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-5">
-                  <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
-                    <div className="p-2.5 bg-amber-400/20 text-amber-400 rounded-xl">
-                      <TrendingUp className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h4 className="font-black text-lg text-white">Reajuste de Preços em Lote</h4>
-                      <p className="text-xs text-slate-400">Aplique um aumento ou desconto percentual em todos os {kits.length} kits simultaneamente.</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-300 uppercase">Percentual de Ajuste (%)</label>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="number"
-                        step="0.5"
-                        value={batchPercent}
-                        onChange={(e) => setBatchPercent(Number(e.target.value))}
-                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-2xl font-black text-amber-400 outline-none"
-                        placeholder="Ex: 5 ou -10"
-                      />
-                      <span className="text-lg font-bold text-slate-400">%</span>
-                    </div>
-                    <p className="text-[11px] text-slate-400">
-                      Exemplo: Digite <strong>5</strong> para aumentar 5% ou <strong>-10</strong> para dar 10% de desconto.
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-3 pt-2">
-                    <button
-                      onClick={handleApplyBatchAdjustment}
-                      className="flex-1 py-3 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase rounded-xl transition-all"
-                    >
-                      Aplicar Reajuste em Todos
-                    </button>
-                    <button
-                      onClick={() => setShowBatchModal(false)}
-                      className="py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl"
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {/* Admin Interactive Kits Table */}
             <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
               <div className="p-4 bg-slate-900 border-b border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -719,7 +1357,7 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
                             <button
                               onClick={() => handleStartEdit(kit)}
                               className="p-2 rounded-lg bg-blue-500/15 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 transition-all"
-                              title="Editar este kit"
+                              title="Editar este kit no formulário"
                             >
                               <Edit3 className="w-3.5 h-3.5" />
                             </button>
@@ -737,185 +1375,6 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
                   </tbody>
                 </table>
               </div>
-            </div>
-
-          </div>
-        )}
-
-        {/* ========================================================================= */}
-        {/* TAB 2: CLIENT OFFICIAL TABLE VIEW ("Kits Sistemas Fotovoltaicos Ongrid") */}
-        {/* ========================================================================= */}
-        {activeTab === 'catalog' && (
-          <div className="space-y-8 animate-fade-in">
-            
-            {/* Filter Bar */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/90 p-4 rounded-3xl border border-slate-800">
-              
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-xs font-bold text-slate-400 uppercase mr-1">Filtrar por Categoria:</span>
-                {[
-                  'Todos',
-                  'Residencial (Até 10 kWp)',
-                  'Comercial (10 a 35 kWp)',
-                  'Usina / Indústria (> 35 kWp)'
-                ].map((filter) => (
-                  <button
-                    key={filter}
-                    onClick={() => setSelectedPowerFilter(filter)}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
-                      selectedPowerFilter === filter
-                        ? 'bg-amber-400 text-slate-950 border-amber-400 shadow-md shadow-amber-500/20'
-                        : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
-                    }`}
-                  >
-                    {filter}
-                  </button>
-                ))}
-              </div>
-
-              <div className="relative w-full sm:w-72">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Pesquisar consumo kWh ou inversor..."
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-xs text-white outline-none focus:border-amber-400"
-                />
-              </div>
-
-            </div>
-
-            {/* Official Table Header Canvas (Recreating exact styling from image) */}
-            <div className="bg-slate-900 border-2 border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
-              
-              {/* Image Header replica with Company details */}
-              <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 text-center border-b border-amber-400/30 relative overflow-hidden">
-                <div className="absolute inset-0 bg-amber-500/5 blur-2xl pointer-events-none" />
-                
-                <div className="relative z-10 space-y-2">
-                  <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-amber-400/10 border border-amber-400/20 text-amber-400 mb-1">
-                    <Sun className="w-8 h-8" />
-                  </div>
-
-                  <h1 className="text-2xl sm:text-3xl font-black text-amber-400 tracking-wider uppercase">
-                    Solar Radiante Empreendimentos LTDA
-                  </h1>
-                  
-                  <p className="text-xs font-bold text-slate-300">
-                    CNPJ: 11.714.619/0001-84
-                  </p>
-
-                  <div className="pt-2">
-                    <span className="inline-block px-6 py-2 rounded-full bg-amber-400 text-slate-950 font-black text-sm sm:text-base uppercase tracking-widest shadow-lg">
-                      Kits Sistemas Fotovoltaicos Ongrid
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Table Data */}
-              <div className="overflow-x-auto">
-                <table className="w-full text-center border-collapse">
-                  <thead>
-                    <tr className="bg-amber-400 text-slate-950 text-xs sm:text-sm font-black uppercase tracking-wider border-b-2 border-amber-500">
-                      <th className="py-4 px-3 border-r border-amber-500/30">KWH Mês</th>
-                      <th className="py-4 px-3 border-r border-amber-500/30">Geração Estimada</th>
-                      <th className="py-4 px-3 border-r border-amber-500/30">kWp</th>
-                      <th className="py-4 px-3 border-r border-amber-500/30">Qtd módulos 700W</th>
-                      <th className="py-4 px-3 border-r border-amber-500/30">Inversor</th>
-                      <th className="py-4 px-3 border-r border-amber-500/30 bg-amber-300 text-slate-950">Valor Kit A vista R$</th>
-                      <th className="py-4 px-3 border-r border-amber-500/30">Financiado R$</th>
-                      <th className="py-4 px-3 border-r border-amber-500/30">Cartão R$</th>
-                      <th className="py-4 px-3">Solicitar Cotação</th>
-                    </tr>
-                  </thead>
-
-                  <tbody className="divide-y divide-slate-800 text-xs sm:text-sm font-bold">
-                    {filteredKits.map((kit, index) => (
-                      <tr
-                        key={kit.id}
-                        className={`transition-colors hover:bg-amber-400/10 ${
-                          index % 2 === 0 ? 'bg-amber-400/5' : 'bg-slate-950/60'
-                        }`}
-                      >
-                        {/* KWH Mês */}
-                        <td className="py-3.5 px-3 font-extrabold text-amber-300 border-r border-slate-800/60">
-                          {kit.kwhMes.toLocaleString('pt-BR')}
-                        </td>
-
-                        {/* Geração Estimada */}
-                        <td className="py-3.5 px-3 font-bold text-emerald-400 border-r border-slate-800/60">
-                          {kit.geracaoEstimada.toLocaleString('pt-BR')}
-                        </td>
-
-                        {/* kWp */}
-                        <td className="py-3.5 px-3 font-black text-amber-400 text-base border-r border-slate-800/60">
-                          {kit.kwp.toFixed(2)}
-                        </td>
-
-                        {/* Qtd Módulos */}
-                        <td className="py-3.5 px-3 text-slate-100 font-bold border-r border-slate-800/60">
-                          {kit.qtdModulos}
-                        </td>
-
-                        {/* Inversor */}
-                        <td className="py-3.5 px-3 text-slate-200 border-r border-slate-800/60">
-                          {kit.inversor}
-                        </td>
-
-                        {/* Valor À Vista */}
-                        <td className="py-3.5 px-3 font-black text-amber-300 text-sm bg-amber-400/10 border-r border-slate-800/60">
-                          {formatBRL(kit.valorAVista)}
-                        </td>
-
-                        {/* Financiado */}
-                        <td className="py-3.5 px-3 text-blue-300 font-bold border-r border-slate-800/60">
-                          {formatBRL(kit.valorFinanciado)}
-                        </td>
-
-                        {/* Cartão */}
-                        <td className="py-3.5 px-3 text-purple-300 font-bold border-r border-slate-800/60">
-                          {formatBRL(kit.valorCartao)}
-                        </td>
-
-                        {/* Action Button */}
-                        <td className="py-3.5 px-3">
-                          <button
-                            onClick={() => handleRequestQuote(kit)}
-                            className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-black text-[11px] uppercase tracking-wider hover:brightness-110 shadow-md transition-all flex items-center justify-center gap-1"
-                          >
-                            <span>Cotar</span>
-                            <ArrowRight className="w-3.5 h-3.5" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Table Footer replicating image footer */}
-              <div className="bg-slate-950 p-6 border-t border-slate-800 text-xs text-slate-300 text-center space-y-2">
-                <p className="font-bold text-amber-400">
-                  Endereço: Alameda vinte e dois, Nº 70, Aeroporto Velho, Santarém-Pá
-                </p>
-                <div className="flex flex-wrap items-center justify-center gap-6 text-slate-400 pt-1">
-                  <span className="flex items-center gap-1.5">
-                    <Mail className="w-4 h-4 text-amber-400" />
-                    solarradiante@gmail.com
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Phone className="w-4 h-4 text-emerald-400" />
-                    Contato: (93) 99121-1156
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Instagram className="w-4 h-4 text-pink-400" />
-                    Instagram: @solarradiante
-                  </span>
-                </div>
-              </div>
-
             </div>
 
           </div>
