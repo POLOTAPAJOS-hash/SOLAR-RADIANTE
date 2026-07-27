@@ -370,22 +370,69 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
     setBatchPercent(0);
   };
 
-  // Export Table as CSV
+  // Export Table as CSV with all topics and UTF-8 BOM encoding for Excel
   const handleExportCSV = () => {
-    const headers = 'KWH Mes,Geracao Estimada (kWh),kWp,Qtd Modulos,Inversor,Valor A Vista (R$),Financiado (R$),Cartao (R$)\n';
-    const rows = kits.map(k => 
-      `${k.kwhMes},${k.geracaoEstimada},${k.kwp},${k.qtdModulos}x ${k.potenciaModuloWatts}W,"${k.inversor}",${k.valorAVista},${k.valorFinanciado},${k.valorCartao}`
-    ).join('\n');
+    // UTF-8 Byte Order Mark for proper accents in Excel/Sheets
+    const BOM = '\uFEFF';
+    
+    // Column Headers containing all topics from the Kits Sistemas Fotovoltaicos Ongrid
+    const headers = [
+      'ID do Kit',
+      'Consumo Alvo (kWh/mês)',
+      'Geração Estimada (kWh/mês)',
+      'Potência do Kit (kWp)',
+      'Potência Requerida (kW)',
+      'Quantidade de Módulos',
+      'Potência por Módulo (Watts)',
+      'Potência Total dos Módulos (Watts)',
+      'Especificação do Inversor',
+      'Valor À Vista (R$)',
+      'Parcela Financiado (R$/mês)',
+      'Parcela Cartão de Crédito 12x (R$/mês)',
+      'Destaque / Categoria / Badge',
+      'Empresa Responsável',
+      'CNPJ Empresa',
+      'Telefone Contato',
+      'E-mail Contato',
+      'Endereço Empresa'
+    ].join(';') + '\n';
 
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8;' });
+    const rows = kits.map(k => {
+      const kwCalculated = transformKwpToKw(k.kwp, 1.20);
+      const totalWatts = k.qtdModulos * (k.potenciaModuloWatts || 700);
+      
+      return [
+        `"${k.id}"`,
+        k.kwhMes,
+        k.geracaoEstimada,
+        `"${k.kwp.toFixed(2)}"`,
+        `"${kwCalculated}"`,
+        k.qtdModulos,
+        k.potenciaModuloWatts || 700,
+        totalWatts,
+        `"${k.inversor.replace(/"/g, '""')}"`,
+        k.valorAVista.toFixed(2).replace('.', ','),
+        k.valorFinanciado.toFixed(2).replace('.', ','),
+        k.valorCartao.toFixed(2).replace('.', ','),
+        `"${(k.badge || 'Kit Ongrid Standard').replace(/"/g, '""')}"`,
+        `"${companyDetails.name.replace(/"/g, '""')}"`,
+        `"${companyDetails.cnpj.replace(/"/g, '""')}"`,
+        `"${companyDetails.phone.replace(/"/g, '""')}"`,
+        `"${companyDetails.email.replace(/"/g, '""')}"`,
+        `"${companyDetails.address.replace(/"/g, '""')}"`
+      ].join(';');
+    }).join('\n');
+
+    const csvContent = BOM + headers + rows;
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `Tabela_Kits_Solar_Radiante_${new Date().toISOString().slice(0,10)}.csv`);
+    link.setAttribute('download', `Tabela_Kits_Solar_Radiante_Ongrid_${new Date().toISOString().slice(0,10)}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    showToast('Tabela exportada em CSV com sucesso!');
+    showToast(`Tabela CSV com todos os ${kits.length} kits e tópicos exportada com sucesso!`);
   };
 
   // Format currency helpers
@@ -646,15 +693,26 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
                 ))}
               </div>
 
-              <div className="relative w-full sm:w-72">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Pesquisar consumo kWh, kWp ou inversor..."
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-xs text-white outline-none focus:border-amber-400"
-                />
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                <div className="relative flex-1 sm:w-72">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Pesquisar consumo kWh, kWp ou inversor..."
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-xs text-white outline-none focus:border-amber-400"
+                  />
+                </div>
+
+                <button
+                  onClick={handleExportCSV}
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-xs uppercase flex items-center gap-1.5 shadow-lg shadow-emerald-500/10 transition-all flex-shrink-0"
+                  title="Baixar Tabela CSV Completa com Todos os Tópicos"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Baixar CSV</span>
+                </button>
               </div>
 
             </div>
