@@ -522,11 +522,11 @@ export const FotusKitBuilder: React.FC<FotusKitBuilderProps> = ({
       <button
         type="button"
         onClick={() => setIsDrawerOpen(true)}
-        className="fixed left-0 top-1/2 -translate-y-1/2 z-40 bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 text-slate-950 font-black py-3.5 px-2.5 sm:px-3 rounded-r-2xl shadow-2xl flex items-center gap-2 cursor-pointer border-t border-r border-b border-amber-300 hover:pr-4 hover:scale-105 transition-all group"
+        className="fixed left-0 top-1/2 -translate-y-1/2 z-40 bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 text-slate-950 font-black py-3 px-2 sm:py-3.5 sm:px-3 rounded-r-2xl shadow-2xl flex flex-col sm:flex-row items-center gap-1.5 sm:gap-2 cursor-pointer border-t border-r border-b border-amber-300 hover:pr-4 hover:scale-105 transition-all group"
         title="Abrir Painel Deslizante Monte Seu Kit Fotus"
       >
-        <Sliders className="w-5 h-5 text-slate-950 group-hover:rotate-180 transition-transform duration-500" />
-        <span className="text-xs font-black uppercase tracking-wider hidden sm:inline [writing-mode:vertical-lr] rotate-180 py-1">
+        <Sliders className="w-5 h-5 text-slate-950 group-hover:rotate-180 transition-transform duration-500 flex-shrink-0" />
+        <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider [writing-mode:vertical-lr] rotate-180 py-1 whitespace-nowrap">
           Monte Seu Kit Fotus
         </span>
       </button>

@@ -68,13 +68,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
             </div>
             <div className="flex flex-col">
               <span 
-                className="text-2xl sm:text-3xl font-black tracking-tight flex items-center gap-2 leading-none"
+                className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-black tracking-tight flex items-center gap-2 leading-none"
                 style={{ color: '#1b0b85' }}
               >
                 SOLAR RADIANTE SANTARÉM
               </span>
               <span 
-                className="text-[11px] uppercase font-extrabold tracking-widest mt-1"
+                className="text-[9px] xs:text-[10px] sm:text-[11px] uppercase font-extrabold tracking-wider sm:tracking-widest mt-1"
                 style={{ color: '#1b0b85' }}
               >
                 Manutenção, Instalação &amp; Eletrotécnica Solar
