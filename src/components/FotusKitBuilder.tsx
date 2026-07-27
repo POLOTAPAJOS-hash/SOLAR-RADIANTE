@@ -10,7 +10,10 @@ import {
   Droplets,
   Calculator,
   ArrowRightLeft,
-  Info
+  Info,
+  Sliders,
+  Sparkles,
+  ChevronRight
 } from 'lucide-react';
 import {
   PRESET_FOTUS_KITS,
@@ -18,6 +21,7 @@ import {
   transformKwpToKw,
   transformKwToKwp
 } from '../data/fotusData';
+import { FotusKitDrawer } from './FotusKitDrawer';
 
 interface FotusKitBuilderProps {
   onOpenQuoteModalWithKit: (kitSummary: string, notes?: string) => void;
@@ -26,6 +30,9 @@ interface FotusKitBuilderProps {
 export const FotusKitBuilder: React.FC<FotusKitBuilderProps> = ({
   onOpenQuoteModalWithKit
 }) => {
+  // Drawer state for left sliding panel
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+
   // kWp Kits Sub-Filter
   const [selectedKwpCategory, setSelectedKwpCategory] = useState<string>('Todos');
   const [selectedPresetId, setSelectedPresetId] = useState<string>('kit-5-80-kwp');
@@ -108,6 +115,38 @@ export const FotusKitBuilder: React.FC<FotusKitBuilderProps> = ({
           <p className="text-slate-300 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
             Selecione a potência pré-dimensionada em kWp (painéis CC) ou kW (inversor CA) ideal para o consumo de sua residência, comércio ou propriedade rural com homologação completa na Equatorial Pará.
           </p>
+        </div>
+
+        {/* Interactive Drawer Launcher Banner */}
+        <div className="max-w-4xl mx-auto mb-10 bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-blue-500/20 border-2 border-amber-400/80 p-5 sm:p-6 rounded-3xl shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-5 relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+          
+          <div className="flex items-center gap-4 relative z-10 text-center sm:text-left">
+            <div className="p-3.5 rounded-2xl bg-amber-400 text-slate-950 shadow-lg shadow-amber-400/20 flex-shrink-0">
+              <Sliders className="w-7 h-7" />
+            </div>
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-amber-400/20 text-amber-300 text-[11px] font-extrabold uppercase tracking-wider mb-1">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Configurador Passo a Passo</span>
+              </div>
+              <h3 className="text-xl sm:text-2xl font-black text-white">
+                Monte Seu Kit Customizado no Painel Deslizante
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-300">
+                Escolha marcas de painéis, inversores Deye/Solplanet, estruturas e proteções no painel lateral à esquerda.
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsDrawerOpen(true)}
+            className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider shadow-xl shadow-amber-500/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 flex-shrink-0 relative z-10"
+          >
+            <span>Abrir Painel Deslizante</span>
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Conversor de Potência kWp <-> kW Widget */}
@@ -478,6 +517,26 @@ export const FotusKitBuilder: React.FC<FotusKitBuilderProps> = ({
         </div>
 
       </div>
+
+      {/* Floating Tab on Left Edge of Screen to open Left Drawer */}
+      <button
+        type="button"
+        onClick={() => setIsDrawerOpen(true)}
+        className="fixed left-0 top-1/2 -translate-y-1/2 z-40 bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 text-slate-950 font-black py-3.5 px-2.5 sm:px-3 rounded-r-2xl shadow-2xl flex items-center gap-2 cursor-pointer border-t border-r border-b border-amber-300 hover:pr-4 hover:scale-105 transition-all group"
+        title="Abrir Painel Deslizante Monte Seu Kit Fotus"
+      >
+        <Sliders className="w-5 h-5 text-slate-950 group-hover:rotate-180 transition-transform duration-500" />
+        <span className="text-xs font-black uppercase tracking-wider hidden sm:inline [writing-mode:vertical-lr] rotate-180 py-1">
+          Monte Seu Kit Fotus
+        </span>
+      </button>
+
+      {/* Fotus Kit Drawer Panel (Sliding from Left) */}
+      <FotusKitDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        onOpenQuoteModalWithKit={onOpenQuoteModalWithKit}
+      />
     </section>
   );
 };
