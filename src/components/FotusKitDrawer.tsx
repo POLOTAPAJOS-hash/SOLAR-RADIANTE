@@ -86,7 +86,7 @@ export const FotusKitDrawer: React.FC<FotusKitDrawerProps> = ({
       `Gostaria de receber uma proposta formal com vistoria técnica e homologação na Equatorial Pará!`;
 
     const encoded = encodeURIComponent(text);
-    window.open(`https://wa.me/5593991234567?text=${encoded}`, '_blank');
+    window.open(`https://wa.me/5593991211156?text=${encoded}`, '_blank');
   };
 
   const handleRequestQuoteModal = () => {
