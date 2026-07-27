@@ -135,7 +135,7 @@ export const FotusKitDrawer: React.FC<FotusKitDrawerProps> = ({
                 <span className="text-xs text-slate-400 font-semibold">Santarém / PA</span>
               </div>
               <h2 className="text-lg sm:text-xl font-black text-white tracking-tight">
-                Monte Seu Kit Fotus
+                Monte Seu Kit Solar
               </h2>
             </div>
           </div>
