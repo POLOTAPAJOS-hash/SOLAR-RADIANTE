@@ -375,7 +375,7 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
     // UTF-8 Byte Order Mark for proper accents in Excel/Sheets
     const BOM = '\uFEFF';
     
-    // Column Headers containing all topics from the Kits Sistemas Fotovoltaicos Ongrid
+    // Column Headers for Kits Sistemas Fotovoltaicos Ongrid
     const headers = [
       'ID do Kit',
       'Consumo Alvo (kWh/mês)',
@@ -388,13 +388,7 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
       'Especificação do Inversor',
       'Valor À Vista (R$)',
       'Parcela Financiado (R$/mês)',
-      'Parcela Cartão de Crédito 12x (R$/mês)',
-      'Destaque / Categoria / Badge',
-      'Empresa Responsável',
-      'CNPJ Empresa',
-      'Telefone Contato',
-      'E-mail Contato',
-      'Endereço Empresa'
+      'Parcela Cartão de Crédito 12x (R$/mês)'
     ].join(';') + '\n';
 
     const rows = kits.map(k => {
@@ -413,13 +407,7 @@ export const SolarRadianteTable: React.FC<SolarRadianteTableProps> = ({
         `"${k.inversor.replace(/"/g, '""')}"`,
         k.valorAVista.toFixed(2).replace('.', ','),
         k.valorFinanciado.toFixed(2).replace('.', ','),
-        k.valorCartao.toFixed(2).replace('.', ','),
-        `"${(k.badge || 'Kit Ongrid Standard').replace(/"/g, '""')}"`,
-        `"${companyDetails.name.replace(/"/g, '""')}"`,
-        `"${companyDetails.cnpj.replace(/"/g, '""')}"`,
-        `"${companyDetails.phone.replace(/"/g, '""')}"`,
-        `"${companyDetails.email.replace(/"/g, '""')}"`,
-        `"${companyDetails.address.replace(/"/g, '""')}"`
+        k.valorCartao.toFixed(2).replace('.', ',')
       ].join(';');
     }).join('\n');
 
